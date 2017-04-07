@@ -35,27 +35,15 @@ Robinson D (2016). <em>fuzzyjoin: Join Tables Together on Inexact Matching</em>.
 </p>
 R packages for genomic sequence analysis
 
-    ## Warning in citation("BSgenome"): no date field in DESCRIPTION file of
-    ## package 'BSgenome'
-
 <p>
 Pagès H (2016). <em>BSgenome: Infrastructure for Biostrings-based genome data packages and support for efficient SNP representation</em>. R package version 1.42.0.
 </p>
-    ## Warning in citation("Biostrings"): no date field in DESCRIPTION file of
-    ## package 'Biostrings'
-
 <p>
 Pagès H, Aboyoun P, Gentleman R and DebRoy S (2016). <em>Biostrings: String objects representing biological sequences, and matching algorithms</em>. R package version 2.42.1.
 </p>
-    ## Warning in withCallingHandlers(.External2(C_parseRd, tcon, srcfile, "UTF-8", : <connection>:6: unexpected END_OF_INPUT '
-    ## '
-
 <p>
 Lawrence M, Huber W, Pagès H, Aboyoun P, Carlson M, Gentleman R, Morgan M and Carey V (2013). “Software for Computing and Annotating Genomic Ranges.” <em>PLoS Computational Biology</em>, <b>9</b>. <a href="http://doi.org/10.1371/journal.pcbi.1003118">doi: 10.1371/journal.pcbi.1003118</a>, <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118}."><http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118>}.</a>
 </p>
-    ## Warning in withCallingHandlers(.External2(C_parseRd, tcon, srcfile, "UTF-8", : <connection>:6: unexpected END_OF_INPUT '
-    ## '
-
 <p>
 Lawrence M, Huber W, Pagès H, Aboyoun P, Carlson M, Gentleman R, Morgan M and Carey V (2013). “Software for Computing and Annotating Genomic Ranges.” <em>PLoS Computational Biology</em>, <b>9</b>. <a href="http://doi.org/10.1371/journal.pcbi.1003118">doi: 10.1371/journal.pcbi.1003118</a>, <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118}."><http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118>}.</a>
 </p>

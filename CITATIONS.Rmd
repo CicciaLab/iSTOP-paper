@@ -6,7 +6,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, results = 'asis', warnings = F)
+knitr::opts_chunk$set(echo = FALSE, results = 'asis', warning = F)
 ```
 
 The authors of this project would like to thank the countless hours of work that have made our analysis possible. In addition to the curators of the [COSMIC and CGC](https://doi.org/10.1093/nar/gkw1121), and the [UCSC genome browser](https://genome.ucsc.edu), we thank the authors of the following free and open-source software pacakges.
