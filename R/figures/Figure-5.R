@@ -18,6 +18,11 @@ plot_data <-
     frac_nonsense_iSTOP_targetable = n_iSTOP_sites_in_gene_in_cancer_with_PAM / n_nonsense_in_gene_in_cancer
   )
 
+plot_data %>%
+  filter(q < 0.001) %>%
+  arrange(q) %>%
+  write_csv('data/Figure-data/frequent-iSTOPers.csv')
+
 keep <-
   plot_data %>%
   group_by(gene) %>%
@@ -25,7 +30,8 @@ keep <-
   ungroup
 
 #gene_order <- plot_data %>% filter(gene %in% unique(keep$gene)) %>% group_by(gene) %>% summarise(n = sum(frac_sites)) %>% arrange(desc(n)) %>% .$gene
-gene_order <- plot_data %>% filter(gene %in% unique(keep$gene), cancer_type == 'All cancers') %>% arrange(desc(frac_nonsense_iSTOP)) %>% .$gene
+#gene_order <- plot_data %>% filter(gene %in% unique(keep$gene), cancer_type == 'All cancers') %>% arrange(desc(frac_nonsense_iSTOP)) %>% .$gene
+gene_order <- plot_data %>% ungroup %>% filter(gene %in% unique(keep$gene) & cancer_type == 'All cancers') %>% mutate(frac = n_iSTOP_sites_in_gene_in_cancer / n_iSTOP_sites_in_gene) %>% arrange(desc(frac)) %>% .$gene
 
 gg1_data <-
   plot_data %>%
@@ -119,24 +125,30 @@ gg3_data <-
   gg1_data %>%
   ungroup %>%
   filter(cancer_type == 'All cancers') %>%
-  select(gene, frac_nonsense_iSTOP, frac_nonsense_iSTOP_targetable) %>%
+  #select(gene, frac_nonsense_iSTOP, frac_nonsense_iSTOP_targetable) %>%
   mutate(
-    frac_nonsense    = 1#,
-    #iSTOP_cancer     = n_iSTOP_sites_in_gene_in_cancer          / n_iSTOP_sites_in_gene,
-    #iSTOP_cancer_PAM = n_iSTOP_sites_in_gene_in_cancer_with_PAM / n_iSTOP_sites_in_gene
+    #frac_nonsense    = 1#,
+    iSTOP_cancer     = n_iSTOP_sites_in_gene_in_cancer          / n_iSTOP_sites_in_gene,
+    iSTOP_cancer_PAM = n_iSTOP_sites_in_gene_in_cancer_with_PAM / n_iSTOP_sites_in_gene
   ) %>%
-  #select(gene, iSTOP_gene, iSTOP_cancer, iSTOP_cancer_PAM) %>%
+  select(gene, iSTOP_cancer, iSTOP_cancer_PAM) %>%
   gather(group, frac, -gene) %>%
   mutate(
-    group = ordered(group, levels = c('frac_nonsense', 'frac_nonsense_iSTOP', 'frac_nonsense_iSTOP_targetable'), labels = c('Nonsense', 'iSTOP', 'iSTOP + PAM'))
-    # group = forcats::fct_rev(group)
+    #group = ordered(group, levels = c('frac_nonsense', 'frac_nonsense_iSTOP', 'frac_nonsense_iSTOP_targetable'), labels = c('Nonsense', 'iSTOP', 'iSTOP + PAM'))
+    group = ordered(group, levels = c('iSTOP_cancer', 'iSTOP_cancer_PAM'), labels = c('% in cancer', '% targetable'))
+    #group = forcats::fct_rev(group)
   )
 
 gg3_data_text <-
   gg1_data %>%
   ungroup %>%
   filter(cancer_type == 'All cancers') %>%
-  select(gene, count = n_iSTOP_sites_in_gene_in_cancer_with_PAM, frac = frac_nonsense_iSTOP_targetable)
+  mutate(frac = n_iSTOP_sites_in_gene_in_cancer_with_PAM / n_iSTOP_sites_in_gene) %>%
+  select(
+    gene,
+    count = n_iSTOP_sites_in_gene_in_cancer_with_PAM,
+    frac
+  )
 
 Fig5A <-
   gg3_data %>%
@@ -144,7 +156,7 @@ Fig5A <-
   geom_col(position = 'identity') +
   geom_text(aes(y = frac, x = gene, label = scales::comma(count)), angle = 0, inherit.aes = F, color = 'white', hjust = 0.5, vjust = 1.2, data = gg3_data_text) +
   #geom_text(aes(y = count + gg_top1_data$count[which(gg_top1_data$group == 'n_nonsense_and_iSTOP_codon_targetable')], x = gene, label = scales::comma(count)),inherit.aes = F, color = 'black', hjust = 0.5, vjust = 1.2, data = gg_top1_data %>% filter(group == 'n_anot_targetable')) +
-  #scale_alpha_manual(values = c(0.1, 0.25, 0.5)) +
+  scale_alpha_manual(values = c(0.5, 1)) +
   #scale_x_continuous(breaks = 1:21) +
   scale_y_continuous(expand = c(0, 0), labels = scales::percent) +
   #scale_y_log10(breaks = c(1, 10, 100, 1000, 10000, 100000), expand = c(0,0), labels = scales::comma) +
@@ -157,6 +169,7 @@ Fig5A <-
     #axis.text.x = element_blank(),
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
     plot.margin = unit(c(0.25,0.25,0.25,0.25),"cm"),
     legend.position = 'left',
     legend.margin = margin(t = 0, unit = 'cm'),
@@ -183,10 +196,10 @@ Fig5B <-
   scale_y_continuous(breaks = c(0, 3, 5, 10, 15, 20, 25, 30, 35), expand = c(0, 0), labels = c(0, 3, 5, 10, 15, 20, 25, 30, '>35')) +
   geom_point(alpha = 0.5, position = position_jitter(),      data = filter(plot_data_limit, `-log10(q)` > 3, `-log10(q)` <= 12)) +
   geom_point(alpha = 0.5, position = position_jitterdodge(), data = filter(plot_data_limit, `-log10(q)` > 12)) +
-  geom_vline(xintercept = seq(0.5, 22, by = 1)) +
+  geom_vline(xintercept = seq(1.5, 21, by = 1)) +
   geom_hline(yintercept = 3, linetype = 'dashed') +
-  coord_flip(ylim = c(0, 40)) +
-  #coord_cartesian(ylim = c(0, 40)) +
+  #coord_flip(ylim = c(0, 40)) +
+  coord_cartesian(ylim = c(0, 40)) +
   #  coord_polar() +
   labs(y = expression(-log[10](q))) +
   guides(color = 'none') +
@@ -194,11 +207,12 @@ Fig5B <-
   theme(
     panel.grid.minor.x = element_blank(),
     #panel.grid.major.x = element_blank(),
-    axis.title.y = element_blank()
+    axis.title.x = element_blank()
     #axis.text.x = element_text(angle = 45, hjust = 1)
   )
 Fig5B
-ggsave('figures/Figure-5B.pdf', Fig5B, width = 5, height = 5)
+ggsave('figures/Figure-5B.pdf', Fig5B + theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.grid.minor = element_blank(), panel.grid.major.x = element_blank()), width = 7.5, height = 5)
+#ggsave('figures/Figure-5B.pdf', Fig5B, width = 5, height = 5)
 
 g5A  <- ggplotGrob(Fig5A + guides(alpha = 'none'))
 g5B  <- ggplotGrob(Fig5B)

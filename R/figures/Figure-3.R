@@ -69,11 +69,11 @@ Fig3C <- match_counts_by_tx %>%
   ggplot(aes(x = pep_length, y = n_match)) +
   geom_point(alpha = 0.2) +
   geom_point(alpha = 0.5, color = 'red', data = filter(match_counts_by_tx, n_match == 0L)) +
-  geom_density2d(color = 'orange') +
+  geom_density2d(color = '#ffe371') +
   scale_x_log10(breaks = c(10, 100, 1000, 10000, 100000), labels = c(10, 100, '1,000', '10,000', '100,000')) +
   scale_y_log10(breaks = c(0.5, 1, 10, 100, 1000, 2000), labels = c(0, 1, 10, 100, '1,000', '')) +
-  annotation_logticks() +
-  stat_smooth(method = 'lm', color = 'green', se = F) +
+  #annotation_logticks() +
+  stat_smooth(method = 'lm', color = '#99b1df', se = F) +
   coord_cartesian(xlim = c(10, 100000), ylim = c(0.5, 2000), expand = F) +
   theme_bw() +
   theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
@@ -240,9 +240,10 @@ sites_summary <-
 Fig3F <-
   sites_summary %>%
   ggplot(aes(y = percent, x = distance)) +
-  geom_line(aes(color = 'orange'), size = 2) +
-  geom_point(aes(color = 'orange'), size = 5) +
-  geom_point(aes(color = 'white'), size = 2) +
+  geom_col(aes(fill = 'orange', color = 'orange'), alpha = 0.5) +
+  #geom_line(aes(color = 'orange'), size = 2) +
+  #geom_point(aes(color = 'orange'), size = 5) +
+  #geom_point(aes(color = 'white'), size = 2) +
   scale_color_manual(breaks = c('orange', 'white'), values = c('#f2a880', 'white')) +
   scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
   scale_x_continuous(breaks = c(50, 100, 150)) +

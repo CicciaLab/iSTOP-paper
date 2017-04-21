@@ -15,11 +15,14 @@ enzyme_performance <-
   ) %>%
   mutate(
     n_sites = nrow(RFLP),
-    percent = (n / n_sites)
+    percent = (n / n_sites) * 100
   )
 
+write_csv(select(enzyme_performance, enzyme, n, percent) %>% arrange(-n), 'data/Figure-data/enzyme-performance.csv')
+
 FigS3A <- enzyme_performance %>%
-  top_n(50, percent) %>%
+  #top_n(50, percent) %>%
+  top_n(10, percent) %>%
   mutate(enzyme = ordered(enzyme, levels = enzyme[order(percent)])) %>%
   ggplot(aes(x = enzyme, y = percent)) +
   geom_col(color = 'black', fill = 'orange', alpha = 0.5) +
