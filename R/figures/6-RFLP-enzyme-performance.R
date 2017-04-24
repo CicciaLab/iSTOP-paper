@@ -18,31 +18,37 @@ enzyme_performance <-
     percent = (n / n_sites) * 100
   )
 
-write_csv(select(enzyme_performance, enzyme, n, percent) %>% arrange(-n), 'data/Figure-data/enzyme-performance.csv')
+write_csv(select(enzyme_performance, enzyme, n, percent) %>% arrange(-n), 'data/Figure-data/RFLP-enzyme-performance.csv')
 
-FigS3A <- enzyme_performance %>%
+RFLP_enzyme_performance_top10 <- enzyme_performance %>%
   #top_n(50, percent) %>%
   top_n(10, percent) %>%
   mutate(enzyme = ordered(enzyme, levels = enzyme[order(percent)])) %>%
   ggplot(aes(x = enzyme, y = percent)) +
   geom_col(color = 'black', fill = 'orange', alpha = 0.5) +
-  scale_y_continuous(labels = scales::percent, expand = c(0, 0)) +
-  coord_flip(ylim = c(0, 0.05)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_flip(ylim = c(0, 5)) +
   labs(y = "% of iSTOP sites with unique cutting +/- 150 bp") +
   theme_bw() +
   theme(axis.title.y = element_blank())
-FigS3A
-ggsave('figures/Figure-S3A.svg', FigS3A, width = 5, height = 7)
 
-iSTOP <- read_csv('data/iSTOP/Hsapiens-hg38.csv')
+RFLP_enzyme_performance_top10
 
-NMD <-
-  iSTOP %>%
-  select(gene, tx, NMD_pred, match_any) %>%
-  group_by(gene, tx) %>%
-  summarise(NMD_possible = any(NMD_pred & match_any)) %>%
-  mutate(NMD_possible = ifelse(is.na(NMD_possible), F, NMD_possible))
+ggsave('figures/RFLP-enzyme-performance-top10.png', RFLP_enzyme_performance_top10, width = 5, height = 7)
 
-(nrow(NMD) - nrow(NMD[!NMD$NMD_possible,])) / nrow(NMD)
+RFLP_enzyme_performance_top50 <- enzyme_performance %>%
+  top_n(50, percent) %>%
+  #top_n(10, percent) %>%
+  mutate(enzyme = ordered(enzyme, levels = enzyme[order(percent)])) %>%
+  ggplot(aes(x = enzyme, y = percent)) +
+  geom_col(color = 'black', fill = 'orange', alpha = 0.5) +
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_flip(ylim = c(0, 5)) +
+  labs(y = "% of iSTOP sites with unique cutting +/- 150 bp") +
+  theme_bw() +
+  theme(axis.title.y = element_blank())
 
+RFLP_enzyme_performance_top50
+
+ggsave('figures/RFLP-enzyme-performance-top50.png', RFLP_enzyme_performance_top50, width = 5, height = 7)
 
