@@ -178,7 +178,7 @@ The raw COSMIC dataset can be cleaned and summarized by sourcing the `R/Clean-CO
 4.  `COSMIC-summary-by-gene.csv` - Summary by gene that includes test results for frequent stoppers (likely tumor suppressors). Note that test results for "All cancers" are simply the smallest observed p-value across all cancer subtypes for a given gene.
 
 ``` r
-source('Clean-COSMIC.R')
+source('R/scripts/Clean-COSMIC.R')
 ```
 
 Reproducing Figures
@@ -195,88 +195,83 @@ Session Information
 
 This analysis was successfully performed with the following system, and package versions:
 
-    ## Session info -----------------------------------------------------------------------------
-
     ##  setting  value                       
     ##  version  R version 3.3.3 (2017-03-06)
     ##  system   x86_64, darwin13.4.0        
-    ##  ui       RStudio (1.0.136)           
+    ##  ui       X11                         
     ##  language (EN)                        
     ##  collate  en_US.UTF-8                 
     ##  tz       America/New_York            
-    ##  date     2017-04-23
-
-    ## Packages ---------------------------------------------------------------------------------
-
-    ##  package              * version    date       source                           
-    ##  assertthat             0.1        2013-12-06 CRAN (R 3.3.0)                   
-    ##  backports              1.0.5      2017-01-18 CRAN (R 3.3.2)                   
-    ##  Biobase                2.34.0     2016-10-18 Bioconductor                     
-    ##  BiocGenerics           0.20.0     2017-03-12 Bioconductor                     
-    ##  BiocInstaller          1.24.0     2016-10-18 Bioconductor                     
-    ##  BiocParallel           1.8.1      2016-10-30 Bioconductor                     
-    ##  Biostrings             2.42.1     2016-12-01 Bioconductor                     
-    ##  bitops                 1.0-6      2013-08-17 CRAN (R 3.3.0)                   
-    ##  broom                  0.4.2      2017-02-13 CRAN (R 3.3.2)                   
-    ##  BSgenome               1.42.0     2016-10-18 Bioconductor                     
-    ##  colorspace             1.3-2      2016-12-14 CRAN (R 3.3.2)                   
-    ##  DBI                    0.6        2017-03-09 CRAN (R 3.3.2)                   
-    ##  devtools               1.12.0     2016-06-24 CRAN (R 3.3.0)                   
-    ##  digest                 0.6.12     2017-01-27 CRAN (R 3.3.2)                   
-    ##  dplyr                * 0.5.0      2016-06-24 CRAN (R 3.3.0)                   
-    ##  evaluate               0.10       2016-10-11 CRAN (R 3.3.0)                   
-    ##  forcats                0.2.0      2017-01-23 CRAN (R 3.3.2)                   
-    ##  foreign                0.8-67     2016-09-13 CRAN (R 3.3.3)                   
-    ##  fuzzyjoin              0.1.2.9000 2017-04-08 Github (dgrtwo/fuzzyjoin@2f30724)
-    ##  GenomeInfoDb           1.10.3     2017-02-07 Bioconductor                     
-    ##  GenomicAlignments      1.10.0     2016-10-18 Bioconductor                     
-    ##  GenomicRanges          1.26.3     2017-02-25 Bioconductor                     
-    ##  ggplot2              * 2.2.1      2016-12-30 CRAN (R 3.3.2)                   
-    ##  gtable                 0.2.0      2016-02-26 CRAN (R 3.3.0)                   
-    ##  haven                  1.0.0      2016-09-23 CRAN (R 3.3.0)                   
-    ##  hms                    0.3        2016-11-22 CRAN (R 3.3.2)                   
-    ##  htmltools              0.3.5      2016-03-21 CRAN (R 3.3.0)                   
-    ##  httr                   1.2.1      2016-07-03 CRAN (R 3.3.0)                   
-    ##  IRanges                2.8.1      2016-11-08 Bioconductor                     
-    ##  iSTOP                * 0.1.0      2017-04-23 Bioconductor                     
-    ##  jsonlite               1.3        2017-02-28 CRAN (R 3.3.2)                   
-    ##  knitr                  1.15.1     2016-11-22 CRAN (R 3.3.2)                   
-    ##  lattice                0.20-34    2016-09-06 CRAN (R 3.3.3)                   
-    ##  lazyeval               0.2.0      2016-06-12 CRAN (R 3.3.0)                   
-    ##  lubridate              1.6.0      2016-09-13 CRAN (R 3.3.0)                   
-    ##  magrittr               1.5        2014-11-22 CRAN (R 3.3.0)                   
-    ##  Matrix                 1.2-8      2017-01-20 CRAN (R 3.3.3)                   
-    ##  memoise                1.0.0      2016-01-29 CRAN (R 3.3.0)                   
-    ##  mnormt                 1.5-5      2016-10-15 CRAN (R 3.3.0)                   
-    ##  modelr                 0.1.0      2016-08-31 CRAN (R 3.3.0)                   
-    ##  munsell                0.4.3      2016-02-13 CRAN (R 3.3.0)                   
-    ##  nlme                   3.1-131    2017-02-06 CRAN (R 3.3.3)                   
-    ##  pbapply                1.3-2      2017-03-01 CRAN (R 3.3.2)                   
-    ##  plyr                   1.8.4      2016-06-08 CRAN (R 3.3.0)                   
-    ##  psych                  1.6.12     2017-01-08 CRAN (R 3.3.2)                   
-    ##  purrr                * 0.2.2      2016-06-18 CRAN (R 3.3.0)                   
-    ##  R6                     2.2.0      2016-10-05 CRAN (R 3.3.0)                   
-    ##  Rcpp                   0.12.9     2017-01-14 CRAN (R 3.3.2)                   
-    ##  RCurl                  1.95-4.8   2016-03-01 CRAN (R 3.3.0)                   
-    ##  readr                * 1.0.0      2016-08-03 CRAN (R 3.3.0)                   
-    ##  readxl                 0.1.1      2016-03-28 CRAN (R 3.3.0)                   
-    ##  reshape2               1.4.2      2016-10-22 CRAN (R 3.3.0)                   
-    ##  rmarkdown              1.3        2016-12-21 CRAN (R 3.3.2)                   
-    ##  rprojroot              1.2        2017-01-16 CRAN (R 3.3.2)                   
-    ##  Rsamtools              1.26.1     2016-10-22 Bioconductor                     
-    ##  rtracklayer            1.34.2     2017-02-19 Bioconductor                     
-    ##  rvest                  0.3.2      2016-06-17 CRAN (R 3.3.0)                   
-    ##  S4Vectors              0.12.1     2017-03-12 Bioconductor                     
-    ##  scales                 0.4.1      2016-11-09 CRAN (R 3.3.2)                   
-    ##  stringi                1.1.2      2016-10-01 CRAN (R 3.3.0)                   
-    ##  stringr              * 1.2.0      2017-02-18 CRAN (R 3.3.2)                   
-    ##  SummarizedExperiment   1.4.0      2016-10-18 Bioconductor                     
-    ##  tibble               * 1.2        2016-08-26 CRAN (R 3.3.0)                   
-    ##  tidyr                * 0.6.1      2017-01-10 CRAN (R 3.3.2)                   
-    ##  tidyverse            * 1.1.1      2017-01-27 CRAN (R 3.3.2)                   
-    ##  withr                  1.0.2      2016-06-20 CRAN (R 3.3.0)                   
-    ##  XML                    3.98-1.5   2016-11-10 CRAN (R 3.3.2)                   
-    ##  xml2                   1.1.1      2017-01-24 CRAN (R 3.3.2)                   
-    ##  XVector                0.14.0     2017-03-12 Bioconductor                     
-    ##  yaml                   2.1.14     2016-11-12 CRAN (R 3.3.2)                   
+    ##  date     2017-04-24                  
+    ## 
+    ##  package              * version    date       source                                 
+    ##  assertthat             0.2.0      2017-04-11 cran (@0.2.0)                          
+    ##  backports              1.0.5      2017-01-18 CRAN (R 3.3.2)                         
+    ##  Biobase                2.34.0     2016-10-18 Bioconductor                           
+    ##  BiocGenerics           0.20.0     2016-10-18 Bioconductor                           
+    ##  BiocParallel           1.8.1      2016-10-30 Bioconductor                           
+    ##  Biostrings             2.42.1     2016-12-01 Bioconductor                           
+    ##  bitops                 1.0-6      2013-08-17 CRAN (R 3.3.0)                         
+    ##  broom                  0.4.2      2017-02-13 CRAN (R 3.3.2)                         
+    ##  BSgenome               1.42.0     2016-10-18 Bioconductor                           
+    ##  colorspace             1.3-2      2016-12-14 CRAN (R 3.3.2)                         
+    ##  DBI                    0.6-1      2017-04-01 CRAN (R 3.3.2)                         
+    ##  devtools               1.12.0     2016-06-24 CRAN (R 3.3.0)                         
+    ##  digest                 0.6.12     2017-01-27 CRAN (R 3.3.2)                         
+    ##  dplyr                * 0.5.0      2016-06-24 CRAN (R 3.3.0)                         
+    ##  evaluate               0.10       2016-10-11 CRAN (R 3.3.0)                         
+    ##  forcats                0.2.0      2017-01-23 CRAN (R 3.3.2)                         
+    ##  foreign                0.8-67     2016-09-13 CRAN (R 3.3.3)                         
+    ##  fuzzyjoin              0.1.2.9000 2017-04-05 Github (dgrtwo/fuzzyjoin@2f30724)      
+    ##  GenomeInfoDb           1.10.3     2017-02-07 Bioconductor                           
+    ##  GenomicAlignments      1.10.1     2017-03-18 Bioconductor                           
+    ##  GenomicRanges          1.26.4     2017-03-18 Bioconductor                           
+    ##  ggplot2              * 2.2.1      2016-12-30 CRAN (R 3.3.2)                         
+    ##  gtable                 0.2.0      2016-02-26 CRAN (R 3.3.0)                         
+    ##  haven                  1.0.0      2016-09-23 CRAN (R 3.3.0)                         
+    ##  hms                    0.3        2016-11-22 CRAN (R 3.3.2)                         
+    ##  htmltools              0.3.5      2016-03-21 CRAN (R 3.3.0)                         
+    ##  httr                   1.2.1      2016-07-03 CRAN (R 3.3.0)                         
+    ##  IRanges                2.8.2      2017-03-18 Bioconductor                           
+    ##  iSTOP                * 0.1.0      2017-04-24 Github (ericedwardbryant/iSTOP@a032181)
+    ##  jsonlite               1.4        2017-04-08 cran (@1.4)                            
+    ##  knitr                  1.15.1     2016-11-22 CRAN (R 3.3.2)                         
+    ##  lattice                0.20-35    2017-03-25 CRAN (R 3.3.2)                         
+    ##  lazyeval               0.2.0      2016-06-12 CRAN (R 3.3.0)                         
+    ##  lubridate              1.6.0      2016-09-13 CRAN (R 3.3.0)                         
+    ##  magrittr               1.5        2014-11-22 CRAN (R 3.3.0)                         
+    ##  Matrix                 1.2-8      2017-01-20 CRAN (R 3.3.3)                         
+    ##  memoise                1.0.0      2016-01-29 CRAN (R 3.3.0)                         
+    ##  mnormt                 1.5-5      2016-10-15 CRAN (R 3.3.0)                         
+    ##  modelr                 0.1.0      2016-08-31 CRAN (R 3.3.0)                         
+    ##  munsell                0.4.3      2016-02-13 CRAN (R 3.3.0)                         
+    ##  nlme                   3.1-131    2017-02-06 CRAN (R 3.3.3)                         
+    ##  pbapply                1.3-2      2017-03-01 CRAN (R 3.3.2)                         
+    ##  plyr                   1.8.4      2016-06-08 CRAN (R 3.3.0)                         
+    ##  psych                  1.7.3.21   2017-03-22 CRAN (R 3.3.2)                         
+    ##  purrr                * 0.2.2      2016-06-18 CRAN (R 3.3.0)                         
+    ##  R6                     2.2.0      2016-10-05 CRAN (R 3.3.0)                         
+    ##  Rcpp                   0.12.10    2017-03-19 CRAN (R 3.3.2)                         
+    ##  RCurl                  1.95-4.8   2016-03-01 CRAN (R 3.3.0)                         
+    ##  readr                * 1.1.0      2017-03-22 CRAN (R 3.3.2)                         
+    ##  readxl                 0.1.1      2016-03-28 CRAN (R 3.3.0)                         
+    ##  reshape2               1.4.2      2016-10-22 CRAN (R 3.3.0)                         
+    ##  rmarkdown              1.4        2017-03-24 CRAN (R 3.3.3)                         
+    ##  rprojroot              1.2        2017-01-16 CRAN (R 3.3.2)                         
+    ##  Rsamtools              1.26.1     2016-10-22 Bioconductor                           
+    ##  rtracklayer            1.34.2     2017-02-19 Bioconductor                           
+    ##  rvest                  0.3.2      2016-06-17 CRAN (R 3.3.0)                         
+    ##  S4Vectors              0.12.2     2017-03-18 Bioconductor                           
+    ##  scales                 0.4.1      2016-11-09 CRAN (R 3.3.2)                         
+    ##  stringi                1.1.3      2017-03-21 CRAN (R 3.3.2)                         
+    ##  stringr              * 1.2.0      2017-02-18 CRAN (R 3.3.2)                         
+    ##  SummarizedExperiment   1.4.0      2016-10-18 Bioconductor                           
+    ##  tibble               * 1.3.0      2017-04-01 CRAN (R 3.3.2)                         
+    ##  tidyr                * 0.6.1      2017-01-10 CRAN (R 3.3.2)                         
+    ##  tidyverse            * 1.1.1      2017-01-27 CRAN (R 3.3.2)                         
+    ##  withr                  1.0.2      2016-06-20 CRAN (R 3.3.0)                         
+    ##  XML                    3.98-1.6   2017-03-30 CRAN (R 3.3.2)                         
+    ##  xml2                   1.1.1      2017-01-24 CRAN (R 3.3.2)                         
+    ##  XVector                0.14.1     2017-03-18 Bioconductor                           
+    ##  yaml                   2.1.14     2016-11-12 CRAN (R 3.3.2)                         
     ##  zlibbioc               1.20.0     2016-10-18 Bioconductor

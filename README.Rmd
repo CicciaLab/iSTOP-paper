@@ -192,7 +192,7 @@ source('R/figures/build-all.R')
 
 This analysis was successfully performed with the following system, and package versions:
 
-```{r echo = F, eval = T}
+```{r echo = F, eval = T, message = F}
 library(tidyverse)
 library(iSTOP)
 library(stringr)
