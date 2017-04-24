@@ -4,7 +4,7 @@ library(iSTOP)
 rm(list = ls())
 
 # Change the file paths as necessary, the files are on our shared Google Drive
-COSMIC <- read_csv('data/COSMIC/COSMIC-nonsense.csv') %>% rename(genome_coord = coord)
+COSMIC <- read_csv('data/COSMIC/COSMIC-nonsense.csv')
 CDS    <- read_csv('data/CDS/Hsapiens-hg38.csv')
 
 # ---- FANCM ----
@@ -25,7 +25,7 @@ FANCM <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_FANCM, match_any & has(RFLP_50))
 )
 FANCM
-ggsave('~/Desktop/FANCM.pdf', FANCM, width = 8, height = 3)
+ggsave('figures/FANCM.pdf', FANCM, width = 8, height = 3)
 
 
 # ---- TIMELESS ----
@@ -47,7 +47,7 @@ TIMELESS <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_TIMELESS, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 TIMELESS
-ggsave('~/Desktop/TIMELESS.pdf', TIMELESS, width = 8, height = 3)
+ggsave('figures/TIMELESS.pdf', TIMELESS, width = 8, height = 3)
 
 # ---- SPRTN ----
 iSTOP_SPRTN <-
@@ -68,7 +68,7 @@ SPRTN <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_SPRTN, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 SPRTN
-ggsave('~/Desktop/SPRTN.pdf', SPRTN, width = 8, height = 3)
+ggsave('figures/SPRTN.pdf', SPRTN, width = 8, height = 3)
 
 # ---- SMARCAL1 ----
 iSTOP_SMARCAL1 <-
@@ -89,7 +89,7 @@ SMARCAL1 <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_SMARCAL1, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 SMARCAL1
-ggsave('~/Desktop/SMARCAL1.pdf', SMARCAL1, width = 8, height = 3)
+ggsave('figures/SMARCAL1.pdf', SMARCAL1, width = 8, height = 3)
 
 # ---- CHEK2 ----
 iSTOP_CHEK2 <-
@@ -110,7 +110,7 @@ CHEK2 <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_CHEK2, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 CHEK2
-ggsave('~/Desktop/CHEK2.pdf', CHEK2, width = 8, height = 3)
+ggsave('figures/CHEK2.pdf', CHEK2, width = 8, height = 3)
 
 # ---- PARP4 ----
 iSTOP_PARP4 <-
@@ -131,7 +131,7 @@ PARP4 <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_PARP4, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 PARP4
-ggsave('~/Desktop/PARP4.pdf', PARP4, width = 8, height = 3)
+ggsave('figures/PARP4.pdf', PARP4, width = 8, height = 3)
 
 
 # ---- PIK3R1 ----
@@ -153,7 +153,7 @@ PIK3R1 <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_PIK3R1, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 PIK3R1
-ggsave('~/Desktop/PIK3R1.pdf', PIK3R1, width = 8, height = 3)
+ggsave('figures/PIK3R1.pdf', PIK3R1, width = 8, height = 3)
 
 # ---- ATM ----
 iSTOP_ATM <-
@@ -174,7 +174,7 @@ ATM <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_ATM, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 ATM
-ggsave('~/Desktop/ATM.pdf', ATM, width = 8, height = 3)
+ggsave('figures/ATM.pdf', ATM, width = 8, height = 3)
 
 
 # ---- SETD2 ----
@@ -196,7 +196,7 @@ SETD2 <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_SETD2, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 SETD2
-ggsave('~/Desktop/SETD2.pdf', SETD2, width = 8, height = 3)
+ggsave('figures/SETD2.pdf', SETD2, width = 8, height = 3)
 
 # ---- EZH2 ----
 iSTOP_EZH2 <-
@@ -217,4 +217,4 @@ EZH2 <- plot_spliced_isoforms(
   `Verifiable with RFLP` = filter(iSTOP_EZH2, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
 )
 EZH2
-ggsave('~/Desktop/EZH2.pdf', EZH2, width = 8, height = 3)
+ggsave('figures/EZH2.pdf', EZH2, width = 8, height = 3)
