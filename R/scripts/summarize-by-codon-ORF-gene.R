@@ -16,7 +16,7 @@ compute_sites_per_100aa <- function(path) {
 compute_codon_summary <- function(path) {
   path %>%
     read_csv(col_types = cols(aa_coord = col_double())) %>%
-    select(chr, strand, genome_coord, match_any) %>%
+    select(codon, chr, strand, genome_coord, match_any) %>%
     filter(!is.na(match_any)) %>% # only counting codons
     distinct %>%
     summarise(
@@ -32,9 +32,8 @@ codon_summary <- map_df(files, compute_codon_summary)
 sites_summary <- map_df(files, compute_sites_per_100aa)
 
 data <- left_join(codon_summary, sites_summary, by = 'species')
-data$species <- ordered(species_order[data$species], levels = species_order)
 
-write_csv(data, 'data/Figure-data/Figure-4A.csv')
+write_csv(data, 'data/Figure-data/Codon-Summary.csv')
 
 # ---- ORFs ----
 
@@ -63,9 +62,8 @@ compute_targetable_transcripts <- function(path) {
 }
 
 data <- map_df(files, compute_targetable_transcripts)
-data$species <- ordered(species_order[data$species], levels = species_order)
 
-write_csv(data, 'data/Figure-data/Figure-4B.csv')
+write_csv(data, 'data/Figure-data/ORF-Summary.csv')
 
 # ---- Genes ----
 files <- list.files('data/iSTOP', '[.]csv', full.names = T)
@@ -93,6 +91,5 @@ compute_targetable_genes <- function(path) {
 }
 
 data <- map_df(files, compute_targetable_genes)
-data$species <- ordered(species_order[data$species], levels = species_order)
 
-write_csv(data, 'data/Figure-data/Figure-4C.csv')
+write_csv(data, 'data/Figure-data/Gene-Summary.csv')
