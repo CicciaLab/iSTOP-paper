@@ -6,7 +6,6 @@ The R project
 <p>
 R Core Team (2017). <em>R: A Language and Environment for Statistical Computing</em>. R Foundation for Statistical Computing, Vienna, Austria. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </p>
-
 The [RStudio](https://www.rstudio.com) IDE.
 
 R packages to streamline data analysis
@@ -45,9 +44,6 @@ Pagès H (2016). <em>BSgenome: Infrastructure for Biostrings-based genome data p
 </p>
 <p>
 Pagès H, Aboyoun P, Gentleman R and DebRoy S (2016). <em>Biostrings: String objects representing biological sequences, and matching algorithms</em>. R package version 2.42.1.
-</p>
-<p>
-Lawrence M, Huber W, Pagès H, Aboyoun P, Carlson M, Gentleman R, Morgan M and Carey V (2013). “Software for Computing and Annotating Genomic Ranges.” <em>PLoS Computational Biology</em>, <b>9</b>. <a href="http://doi.org/10.1371/journal.pcbi.1003118">doi: 10.1371/journal.pcbi.1003118</a>, <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118}."><http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118>}.</a>
 </p>
 <p>
 Lawrence M, Huber W, Pagès H, Aboyoun P, Carlson M, Gentleman R, Morgan M and Carey V (2013). “Software for Computing and Annotating Genomic Ranges.” <em>PLoS Computational Biology</em>, <b>9</b>. <a href="http://doi.org/10.1371/journal.pcbi.1003118">doi: 10.1371/journal.pcbi.1003118</a>, <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118}."><http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1003118>}.</a>

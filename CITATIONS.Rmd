@@ -41,7 +41,6 @@ print(citation('fuzzyjoin'), style = 'html')
 print(citation('BSgenome'), style = 'html')
 print(citation('Biostrings'), style = 'html')
 print(citation('IRanges'), style = 'html')
-print(citation('GenomicRanges'), style = 'html')
 print(citation('biomaRt'), style = 'html')
 ```
 
