@@ -202,7 +202,7 @@ This analysis was successfully performed with the following system, and package 
     ##  language (EN)                        
     ##  collate  en_US.UTF-8                 
     ##  tz       America/New_York            
-    ##  date     2017-04-24                  
+    ##  date     2017-04-25                  
     ## 
     ##  package              * version    date       source                                 
     ##  assertthat             0.2.0      2017-04-11 cran (@0.2.0)                          
