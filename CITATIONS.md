@@ -58,12 +58,3 @@ R packages for figure generation
 <p>
 Wickham H (2009). <em>ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. ISBN 978-0-387-98140-6, <a href="http://ggplot2.org">http://ggplot2.org</a>.
 </p>
-<p>
-Auguie B (2016). <em>gridExtra: Miscellaneous Functions for "Grid" Graphics</em>. R package version 2.2.1, <a href="https://CRAN.R-project.org/package=gridExtra">https://CRAN.R-project.org/package=gridExtra</a>.
-</p>
-<p>
-Wickham H (2016). <em>gtable: Arrange 'Grobs' in Tables</em>. R package version 0.2.0, <a href="https://CRAN.R-project.org/package=gtable">https://CRAN.R-project.org/package=gtable</a>.
-</p>
-<p>
-Wilke C (2016). <em>cowplot: Streamlined Plot Theme and Plot Annotations for 'ggplot2'</em>. R package version 0.7.0, <a href="https://CRAN.R-project.org/package=cowplot">https://CRAN.R-project.org/package=cowplot</a>.
-</p>

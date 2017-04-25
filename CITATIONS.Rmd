@@ -46,7 +46,4 @@ R packages for figure generation
 
 ```{r}
 print(citation('ggplot2'), style = 'html')
-print(citation('gridExtra'), style = 'html')
-print(citation('gtable'), style = 'html')
-print(citation('cowplot'), style = 'html')
 ```
