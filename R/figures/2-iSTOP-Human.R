@@ -42,7 +42,7 @@ codon_summary_human <-
   )
 codon_summary_human
 
-ggsave('figures/Codon-summary-human.pdf', codon_summary, height = 5, width = 5)
+ggsave('figures/Codon-summary-human.pdf', codon_summary_human, height = 5, width = 5)
 
 # ---- Protein length vs. Targetable codons ----
 match_counts_by_pep_length_data <- codons_tx %>%
@@ -216,7 +216,7 @@ RFLP <- 'data/iSTOP-compact/Hsapiens-hg38.csv' %>%
   distinct
 
 RFLP_summary_data <-
-  sites %>%
+  RFLP %>%
   summarise(
     total = n(),
     RFLP_150 = length(which(!is.na(RFLP_150))),
