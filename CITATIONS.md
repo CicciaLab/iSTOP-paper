@@ -6,6 +6,7 @@ The R project
 <p>
 R Core Team (2017). <em>R: A Language and Environment for Statistical Computing</em>. R Foundation for Statistical Computing, Vienna, Austria. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </p>
+
 The [RStudio](https://www.rstudio.com) IDE.
 
 R packages to streamline data analysis
