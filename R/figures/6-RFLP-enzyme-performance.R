@@ -35,6 +35,8 @@ RFLP_enzyme_performance_top10 <- enzyme_performance %>%
 RFLP_enzyme_performance_top10
 
 ggsave('figures/RFLP-enzyme-performance-top10.png', RFLP_enzyme_performance_top10, width = 5, height = 7)
+#ggsave('figures/RFLP-enzyme-performance-top10.pdf', RFLP_enzyme_performance_top10, width = 5, height = 7)
+
 
 RFLP_enzyme_performance_top50 <- enzyme_performance %>%
   top_n(50, percent) %>%
