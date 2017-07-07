@@ -14,7 +14,8 @@ iSTOP_FANCM <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 FANCM <- plot_spliced_isoforms(
   gene   = 'FANCM',
@@ -22,7 +23,7 @@ FANCM <- plot_spliced_isoforms(
   colors = c('black', 'blue', 'darkgreen'),
   `CAA, CAG, CGA, TGG`   = iSTOP_FANCM,
   `iSTOP targetable`     = filter(iSTOP_FANCM, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_FANCM, match_any & has(RFLP_50))
+  `Verifiable with RFLP` = filter(iSTOP_FANCM, match_any & (has(RFLP_C_50) | has(RFLP_T_50)))
 )
 FANCM
 ggsave('figures/FANCM.pdf', FANCM, width = 8, height = 3)
@@ -35,7 +36,8 @@ iSTOP_TIMELESS <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 TIMELESS <- plot_spliced_isoforms(
   gene   = 'TIMELESS',
@@ -44,7 +46,7 @@ TIMELESS <- plot_spliced_isoforms(
   #`Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_TIMELESS,
   `iSTOP targetable`     = filter(iSTOP_TIMELESS, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_TIMELESS, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_TIMELESS, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 TIMELESS
 ggsave('figures/TIMELESS.pdf', TIMELESS, width = 8, height = 3)
@@ -56,7 +58,8 @@ iSTOP_SPRTN <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 SPRTN <- plot_spliced_isoforms(
   gene   = 'SPRTN',
@@ -65,7 +68,7 @@ SPRTN <- plot_spliced_isoforms(
   #`Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_SPRTN,
   `iSTOP targetable`     = filter(iSTOP_SPRTN, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_SPRTN, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_SPRTN, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 SPRTN
 ggsave('figures/SPRTN.pdf', SPRTN, width = 8, height = 3)
@@ -77,7 +80,8 @@ iSTOP_SMARCAL1 <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 SMARCAL1 <- plot_spliced_isoforms(
   gene   = 'SMARCAL1',
@@ -86,7 +90,7 @@ SMARCAL1 <- plot_spliced_isoforms(
   #`Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_SMARCAL1,
   `iSTOP targetable`     = filter(iSTOP_SMARCAL1, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_SMARCAL1, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_SMARCAL1, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 SMARCAL1
 ggsave('figures/SMARCAL1.pdf', SMARCAL1, width = 8, height = 3)
@@ -98,7 +102,8 @@ iSTOP_CHEK2 <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 CHEK2 <- plot_spliced_isoforms(
   gene   = 'CHEK2',
@@ -107,7 +112,7 @@ CHEK2 <- plot_spliced_isoforms(
   #`Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_CHEK2,
   `iSTOP targetable`     = filter(iSTOP_CHEK2, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_CHEK2, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_CHEK2, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 CHEK2
 ggsave('figures/CHEK2.pdf', CHEK2, width = 8, height = 3)
@@ -119,7 +124,8 @@ iSTOP_PARP4 <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 PARP4 <- plot_spliced_isoforms(
   gene   = 'PARP4',
@@ -128,7 +134,7 @@ PARP4 <- plot_spliced_isoforms(
   #`Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_PARP4,
   `iSTOP targetable`     = filter(iSTOP_PARP4, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_PARP4, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_PARP4, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 PARP4
 ggsave('figures/PARP4.pdf', PARP4, width = 8, height = 3)
@@ -141,7 +147,8 @@ iSTOP_PIK3R1 <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 PIK3R1 <- plot_spliced_isoforms(
   gene   = 'PIK3R1',
@@ -150,7 +157,7 @@ PIK3R1 <- plot_spliced_isoforms(
   #`Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_PIK3R1,
   `iSTOP targetable`     = filter(iSTOP_PIK3R1, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_PIK3R1, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_PIK3R1, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 PIK3R1
 ggsave('figures/PIK3R1.pdf', PIK3R1, width = 8, height = 3)
@@ -162,7 +169,8 @@ iSTOP_ATM <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 ATM <- plot_spliced_isoforms(
   gene   = 'ATM',
@@ -171,7 +179,7 @@ ATM <- plot_spliced_isoforms(
   `Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_ATM,
   `iSTOP targetable`     = filter(iSTOP_ATM, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_ATM, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_ATM, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 ATM
 ggsave('figures/ATM.pdf', ATM, width = 8, height = 3)
@@ -184,7 +192,8 @@ iSTOP_SETD2 <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 SETD2 <- plot_spliced_isoforms(
   gene   = 'SETD2',
@@ -193,7 +202,7 @@ SETD2 <- plot_spliced_isoforms(
   `Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_SETD2,
   `iSTOP targetable`     = filter(iSTOP_SETD2, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_SETD2, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_SETD2, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 SETD2
 ggsave('figures/SETD2.pdf', SETD2, width = 8, height = 3)
@@ -205,7 +214,8 @@ iSTOP_EZH2 <-
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   group_by(gene) %>%
   filter(cds_length == max(cds_length)) %>%
-  add_RFLP(width = 50)
+  add_RFLP(width = 50) %>%
+  add_RFLP(width = 50, recognizes = 't')
 
 EZH2 <- plot_spliced_isoforms(
   gene   = 'EZH2',
@@ -214,7 +224,7 @@ EZH2 <- plot_spliced_isoforms(
   `Nonsense in cancer`   = COSMIC,
   `CAA, CAG, CGA, TGG`   = iSTOP_EZH2,
   `iSTOP targetable`     = filter(iSTOP_EZH2, match_any),
-  `Verifiable with RFLP` = filter(iSTOP_EZH2, match_any & has(RFLP_50)) # The RFLP number will change depending on the width
+  `Verifiable with RFLP` = filter(iSTOP_EZH2, match_any & (has(RFLP_C_50) | has(RFLP_T_50))) # The RFLP number will change depending on the width
 )
 EZH2
 ggsave('figures/EZH2.pdf', EZH2, width = 8, height = 3)

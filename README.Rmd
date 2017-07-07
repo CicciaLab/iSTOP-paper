@@ -24,7 +24,7 @@ Then, go to [github.com/CicciaLab/iSTOP-paper](github.com/CicciaLab/iSTOP-paper)
 
 ## System requirements
 
-This analysis requires ~11 GB of disk space, at least 4 GB of memory, and some patience. While the analysis should be cross-platform, it has only been tested on macOS Sierra Version 10.12.4 with a 4 GHz processor and 32 GB of memory. Processing time on this system using 4 cores for just the Human genome is ~30 minutes to locate all iSTOP codons and targets, and an additional ~40 minutes for each RFLP annotation width (i.e. `add_RFLP(width = 150)` takes ~40 minutes).
+This analysis requires ~11 GB of disk space, at least 4 GB of memory, and some patience. While the analysis should be cross-platform, it has only been tested on macOS Sierra Version 10.12.5 with a 4 GHz processor and 32 GB of memory. Processing time on this system using 4 cores for just the Human genome is ~30 minutes to locate all iSTOP codons and targets, and an additional ~40 minutes for each RFLP annotation width (i.e. `add_RFLP(width = 150)` takes ~40 minutes).
 
 ## R packages
 
@@ -42,8 +42,7 @@ BiocInstaller::biocLite(c(
   'assertthat',
   'pbapply',
   'devtools',
-  # Packages from GitHub (github.com) (version with genome_*_join)
-  'dgrtwo/fuzzyjoin',
+  'fuzzyjoin',
   # Packages from Bioconductor (bioconductor.org)
   'BSgenome',
   'Biostrings',
@@ -145,13 +144,19 @@ read_csv('data/CDS/Hsapiens-hg38.csv', col_types = 'cciccii') %>%
   locate_codons(BSgenome.Hsapiens.UCSC.hg38::Hsapiens, cores = cores) %>%
   locate_PAM(BSgenome.Hsapiens.UCSC.hg38::Hsapiens) %>%
   write_csv('data/iSTOP/Hsapiens-hg38.csv') %>%       # ~ 1 GB
-  compact_iSTOP %>%
+  compact_iSTOP() %>%  # compresses information for multiple transcripts
+  # Loss of cut site columns named RFLP_C_<width>
   add_RFLP(width = 150, cores = cores) %>%
   add_RFLP(width = 100, cores = cores) %>%
   add_RFLP(width = 50,  cores = cores) %>%
+  # Gain of cut site columns named RFLP_T_<width>
+  add_RFLP(width = 150, cores = cores, recognizes = 't') %>%
+  add_RFLP(width = 100, cores = cores, recognizes = 't') %>%
+  add_RFLP(width = 50,  cores = cores, recognizes = 't') %>%
   write_csv('data/iSTOP-compact/Hsapiens-hg38.csv')
 
 # This script will run the above command for the non-human species
+# Only RFLP width 50 is computed for these species
 source('R/scripts/iSTOP-non-human-species.R')
 ```
 
@@ -166,6 +171,21 @@ list.files('data/iSTOP', '[.]csv$', full.names = T) %>%
 # Summarize targetability for all species on codon, ORF and gene levels
 source('R/scripts/summarize-by-codon-ORF-gene.R')
 ```
+
+# Off-target estimates
+
+**Warning:** No memory optimization has been done for off-target searching, so this analysis requires >6 GB of RAM and several hours of processing time. This section can be skipped if desired.
+
+The following script will populate the `data/Off-target-counts` directory with estimates of the number of targets in the genome for each guide. The current settings restrict the search space by fixing positions 9 through 12 in the guide (i.e. no ambiguities are allowed in the guides "seed" sequence). The PAM is also fixed allowing for ambiguity where specified (e.g. "NGG" allows ambiguity in the first position of the PAM). Up to two mismatches are tolerated in the positions 1 through 8 of the guide. The resulting tables include two columns:
+
+1. **guide** - The guide sequence
+2. **n_fuzzy_matches** - The number of fuzzy matches in the genome. Each guide is expected to have 1 match in the genome. More than 1 match indicates there might be other target sites in the genome (when allowing two mismatches in the leading 8 bases of the guide)
+
+```{r}
+cores = 1
+source('R/scripts/Off-target-count-estimation.R')
+```
+
 
 # Analysis of COSMIC nonsense mutations
 

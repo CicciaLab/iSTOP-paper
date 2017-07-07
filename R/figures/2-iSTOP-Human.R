@@ -59,36 +59,38 @@ match_counts_by_pep_length_data <- codons_tx %>%
     n_sgNNNRRT = length(which(match_sgNNNRRT))
   )
 
-match_counts_by_pep_length <-
-  match_counts_by_pep_length_data %>%
-  ggplot(aes(x = pep_length, y = n_match)) +
-  geom_point(alpha = 0.2) +
-  geom_point(alpha = 0.5, color = 'red', data = filter(match_counts_by_pep_length_data, n_match == 0L)) +
-  geom_density2d(color = '#ffe371') +
-  scale_x_log10(breaks = c(10, 100, 1000, 10000, 100000), labels = c(10, 100, '1,000', '10,000', '100,000')) +
-  scale_y_log10(breaks = c(0.5, 1, 10, 100, 1000, 2000), labels = c(0, 1, 10, 100, '1,000', '')) +
-  annotation_logticks() +
-  stat_smooth(method = 'lm', color = '#99b1df', se = F) +
-  coord_cartesian(xlim = c(10, 100000), ylim = c(0.5, 2000), expand = F) +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
-  annotate(
-    'text',
-    color = 'red',
-    hjust = 'left',
-    x = 1050,
-    y = 2,
-    label = str_c(
-      nrow(filter(match_counts_by_pep_length_data, n_match == 0L)),
-      ' (',
-      round((nrow(filter(match_counts_by_pep_length_data, n_match == 0L)) / nrow(match_counts_by_pep_length_data)) * 100, digits = 2),
-      '%) untargetable')
-  ) +
-  annotate('segment', x = 1000, y = 1.6, xend = 150, yend = 0.6, size = 1, color = 'red', arrow = arrow(angle = 15, length = unit(0.15, "inches"), type = 'closed')) +
-  labs(x = 'Protein length (AA)', y = 'Targetable codons')
-match_counts_by_pep_length
+suppressWarnings({
+  match_counts_by_pep_length <-
+    match_counts_by_pep_length_data %>%
+    ggplot(aes(x = pep_length, y = n_match)) +
+    geom_point(alpha = 0.2) +
+    geom_point(alpha = 0.5, color = 'red', data = filter(match_counts_by_pep_length_data, n_match == 0L)) +
+    geom_density2d(color = '#ffe371') +
+    scale_x_log10(breaks = c(10, 100, 1000, 10000, 100000), labels = c(10, 100, '1,000', '10,000', '100,000')) +
+    scale_y_log10(breaks = c(0.5, 1, 10, 100, 1000, 2000), labels = c(0, 1, 10, 100, '1,000', '')) +
+    annotation_logticks() +
+    stat_smooth(method = 'lm', color = '#99b1df', se = F) +
+    coord_cartesian(xlim = c(10, 100000), ylim = c(0.5, 2000), expand = F) +
+    theme_bw() +
+    theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
+    annotate(
+      'text',
+      color = 'red',
+      hjust = 'left',
+      x = 1050,
+      y = 2,
+      label = str_c(
+        nrow(filter(match_counts_by_pep_length_data, n_match == 0L)),
+        ' (',
+        round((nrow(filter(match_counts_by_pep_length_data, n_match == 0L)) / nrow(match_counts_by_pep_length_data)) * 100, digits = 2),
+        '%) untargetable')
+    ) +
+    annotate('segment', x = 1000, y = 1.6, xend = 150, yend = 0.6, size = 1, color = 'red', arrow = arrow(angle = 15, length = unit(0.15, "inches"), type = 'closed')) +
+    labs(x = 'Protein length (AA)', y = 'Targetable codons')
+  match_counts_by_pep_length
 
-ggsave('figures/Match-counts-by-pep-length.pdf', match_counts_by_pep_length, height = 5, width = 5)
+  ggsave('figures/Match-counts-by-pep-length.pdf', match_counts_by_pep_length, height = 5, width = 5)
+})
 
 # ---- ECDF earliest targetable codon ----
 
@@ -114,13 +116,13 @@ earliest_by_tx <-
   group_by(tx, pep_length) %>%
   summarise(
     untargetable                      = all(is.infinite(relative_position)),
-    earliest_relative_position_All    = min(relative_position[match_any]),
-    earliest_relative_position_NGG    = min(relative_position[match_sgNGG]),
-    earliest_relative_position_NGA    = min(relative_position[match_sgNGA]),
-    earliest_relative_position_NGCG   = min(relative_position[match_sgNGCG]),
-    earliest_relative_position_NGAG   = min(relative_position[match_sgNGAG]),
-    earliest_relative_position_NNGRRT = min(relative_position[match_sgNNGRRT]),
-    earliest_relative_position_NNNRRT = min(relative_position[match_sgNNNRRT])
+    earliest_relative_position_All    = suppressWarnings(min(relative_position[match_any])),
+    earliest_relative_position_NGG    = suppressWarnings(min(relative_position[match_sgNGG])),
+    earliest_relative_position_NGA    = suppressWarnings(min(relative_position[match_sgNGA])),
+    earliest_relative_position_NGCG   = suppressWarnings(min(relative_position[match_sgNGCG])),
+    earliest_relative_position_NGAG   = suppressWarnings(min(relative_position[match_sgNGAG])),
+    earliest_relative_position_NNGRRT = suppressWarnings(min(relative_position[match_sgNNGRRT])),
+    earliest_relative_position_NNNRRT = suppressWarnings(min(relative_position[match_sgNNNRRT]))
   ) %>%
   ungroup %>%
   # if not targetable then set relative position to 2 (outside range of [0, 1])
@@ -134,25 +136,26 @@ earliest_by_tx_gathered <-
 #  bind_rows(data_frame(PAM = 'Total', earliest_relative_position = 2)) %>%  # used only to get matching color scale with codon_summary_human
   mutate(PAM = PAM %>% ordered(levels = rev(names(colors))))
 
-ecdf_earliest_targetable_position <-
-  ggplot(earliest_by_tx_gathered) +
-  stat_ecdf(
-    aes(earliest_relative_position, color = PAM),
-    size  = 1.75,
-    alpha = 0.75
-  ) +
-  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1), expand = F) +
-  #scale_color_manual(values = colors) +
-  scale_x_continuous(breaks = seq(0, 1, by = 0.1)) +
-  scale_y_continuous(breaks = seq(0, 1, by = 0.1), labels = scales::percent_format()) +
-  labs(x = 'Relative position in peptide',
-       y = 'Earliest targetable position < relative position \n(% of protein coding transcripts)') +
-  theme_bw() +
-  theme(aspect.ratio = 1, panel.grid.minor = element_blank())
-ecdf_earliest_targetable_position
+suppressWarnings({
+  ecdf_earliest_targetable_position <-
+    ggplot(earliest_by_tx_gathered) +
+    stat_ecdf(
+      aes(earliest_relative_position, color = PAM),
+      size  = 1.75,
+      alpha = 0.75
+    ) +
+    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1), expand = F) +
+    #scale_color_manual(values = colors) +
+    scale_x_continuous(breaks = seq(0, 1, by = 0.1)) +
+    scale_y_continuous(breaks = seq(0, 1, by = 0.1), labels = scales::percent_format()) +
+    labs(x = 'Relative position in peptide',
+         y = 'Earliest targetable position < relative position \n(% of protein coding transcripts)') +
+    theme_bw() +
+    theme(aspect.ratio = 1, panel.grid.minor = element_blank())
+  ecdf_earliest_targetable_position
 
-ggsave('figures/ECDF-earliest-targetable-position.pdf', ecdf_earliest_targetable_position, height = 5, width = 5)
-
+  ggsave('figures/ECDF-earliest-targetable-position.pdf', ecdf_earliest_targetable_position, height = 5, width = 5)
+})
 # ---- Targetable homologs ----
 targetable_homologs_data <-
   read_csv('data/Figure-data/Targetable-Homologs.csv') %>%
@@ -203,15 +206,18 @@ targetable_homologs
 
 ggsave('figures/Targetable-homologs.pdf', targetable_homologs, width = 5, height = 5)
 
-# ---- Restriction enzymes
+# ---- Restriction enzymes ----
 RFLP <- 'data/iSTOP-compact/Hsapiens-hg38.csv' %>%
   read_csv(col_types = cols_only(
     chr          = col_character(),
     strand       = col_character(),
     genome_coord = col_integer(),
-    RFLP_150     = col_character(),
-    RFLP_100     = col_character(),
-    RFLP_50      = col_character())
+    RFLP_C_150   = col_character(),
+    RFLP_C_100   = col_character(),
+    RFLP_C_50    = col_character(),
+    RFLP_T_150   = col_character(),
+    RFLP_T_100   = col_character(),
+    RFLP_T_50    = col_character())
   ) %>%
   distinct
 
@@ -219,31 +225,49 @@ RFLP_summary_data <-
   RFLP %>%
   summarise(
     total = n(),
-    RFLP_150 = length(which(!is.na(RFLP_150))),
-    RFLP_100 = length(which(!is.na(RFLP_100))),
-    RFLP_50  = length(which(!is.na(RFLP_50)))
+    RFLP_A_150 = length(which(!is.na(RFLP_C_150) | !is.na(RFLP_T_150))),
+    RFLP_A_100 = length(which(!is.na(RFLP_C_100) | !is.na(RFLP_T_100))),
+    RFLP_A_50  = length(which(!is.na(RFLP_C_50) | !is.na(RFLP_T_50))),
+    RFLP_B_150 = length(which(!is.na(RFLP_C_150) & !is.na(RFLP_T_150))),
+    RFLP_B_100 = length(which(!is.na(RFLP_C_100) & !is.na(RFLP_T_100))),
+    RFLP_B_50  = length(which(!is.na(RFLP_C_50) & !is.na(RFLP_T_50))),
+    RFLP_C_150 = length(which(!is.na(RFLP_C_150))),
+    RFLP_C_100 = length(which(!is.na(RFLP_C_100))),
+    RFLP_C_50  = length(which(!is.na(RFLP_C_50))),
+    RFLP_T_150 = length(which(!is.na(RFLP_T_150))),
+    RFLP_T_100 = length(which(!is.na(RFLP_T_100))),
+    RFLP_T_50  = length(which(!is.na(RFLP_T_50)))
   ) %>%
   gather(distance, count, -total) %>%
   mutate(
-    distance = gsub('RFLP_', '', distance) %>% as.integer,
-    percent = count / total
+    type =
+      case_when(
+        grepl('RFLP_A', distance) ~ 'Loss or Gain',
+        grepl('RFLP_B', distance) ~ 'Loss & Gain',
+        grepl('RFLP_C', distance) ~ 'Loss',
+        grepl('RFLP_T', distance) ~ 'Gain'
+      ),
+    type = ordered(type, levels = c('Loss or Gain', 'Loss', 'Gain', 'Loss & Gain')),
+    distance = gsub('RFLP_._', '', distance) %>% as.integer,
+    percent  = count / total
   )
 
 RFLP_summary <-
   RFLP_summary_data %>%
-  ggplot(aes(y = percent, x = distance)) +
-  geom_col(aes(fill = 'orange', color = 'orange'), alpha = 0.5) +
+  ggplot(aes(y = percent, x = distance, fill = type, color = type, alpha = type)) +
+  geom_col(position = position_dodge()) +
   #geom_line(aes(color = 'orange'), size = 2) +
   #geom_point(aes(color = 'orange'), size = 5) +
   #geom_point(aes(color = 'white'), size = 2) +
-  scale_color_manual(breaks = c('orange', 'white'), values = c('#f2a880', 'white')) +
+  #scale_color_manual(breaks = c('orange', 'white'), values = c('#f2a880', 'white')) +
+  scale_alpha_manual(values = seq(from = 0.8, to = 0.3, length.out = 4)) +
   scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
   scale_x_continuous(breaks = c(50, 100, 150)) +
   coord_cartesian(ylim = c(0, 1)) +
-  labs(y = 'iSTOP verifiable by RFLP\n(loss of cutting after edit)', x = 'Range of unique cutting\n(+/- bases from edited site)') +
+  labs(y = 'iSTOP verifiable by RFLP', x = 'Range of unique cutting\n(+/- bases from edited site)') +
   theme_bw() +
   theme(panel.grid.major.y = element_line(color = 'black', linetype = 'dotted')) +
-  guides(color = 'none', fill = 'none')
+  labs(alpha = 'Cut after edit', fill = 'Cut after edit', color = 'Cut after edit')
 RFLP_summary
 
 ggsave('figures/RFLP-summary.pdf', RFLP_summary, width = 5, height = 5)

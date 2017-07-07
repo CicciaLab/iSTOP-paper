@@ -3,7 +3,7 @@ Twenty_Twenty <-
   select(gene, q_TSG_20_20 = `tsg q-value`)
 
 TUSON <-
-  readxl::read_excel('data/PMID27911828/pnas.1616440113.sd04.xlsx', sheet = 2, skip = 1) %>%
+  suppressWarnings(readxl::read_excel('data/PMID27911828/pnas.1616440113.sd04.xlsx', sheet = 2, skip = 1)) %>%
   select(gene = Gene, q_TSG_TUSON = TUSON.combined.qvalue.TSG)
 
 MutSigCV <-
