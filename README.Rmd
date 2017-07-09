@@ -177,7 +177,7 @@ The raw COSMIC dataset can be cleaned and summarized by sourcing the `R/Clean-CO
 4. `COSMIC-summary-by-gene.csv` - Summary by gene that includes test results for frequent stoppers (likely tumor suppressors). Note that test results for "All cancers" are simply the smallest observed p-value across all cancer subtypes for a given gene.
 
 ```{r}
-source('Clean-COSMIC.R')
+source('R/scripts/Clean-COSMIC.R')
 ```
 
 # Reproducing Figures
@@ -192,7 +192,7 @@ source('R/figures/build-all.R')
 
 This analysis was successfully performed with the following system, and package versions:
 
-```{r echo = F, eval = T}
+```{r echo = F, eval = T, message = F}
 library(tidyverse)
 library(iSTOP)
 library(stringr)

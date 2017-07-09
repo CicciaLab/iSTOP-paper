@@ -1,8 +1,8 @@
-# ---- Figure 1A: Number of codons that can be targeted with CAS9 base editing ----
-Fig1A_data <- read_csv('data/Figure-data/Figure-1A.csv')
+# ---- Number of codons that can be targeted with CAS9 base editing ----
+Base_editing_summary_data <- read_csv('data/Figure-data/Base-editing-summary.csv')
 
-Fig1A <-
-  Fig1A_data %>%
+Base_editing_summary <-
+  Base_editing_summary_data %>%
   mutate(group = forcats::fct_rev(group)) %>%
   ggplot(aes(x = strand, y = n / 64, fill = group)) +
   geom_col(color = 'black', alpha = 0.5, width = 0.4) +
@@ -17,19 +17,19 @@ Fig1A <-
     panel.grid.major.x = element_blank()
   )
 
-Fig1A
-ggsave('figures/Figure-1A.pdf', Fig1A, width = 4, height = 3)
+Base_editing_summary
+ggsave('figures/Base-editing-summary.pdf', Base_editing_summary, width = 4, height = 3)
 
 # ---- Figure 1B: Number of amino acids that can be mutated to/from with CAS9 base editing ----
-Fig1D_data <- read_csv('data/Figure-data/Figure-1D.csv')
+Base_editing_AA_combn_data <- read_csv('data/Figure-data/Base-editing-AA-missense-combinations.csv')
 AA_order <- c(
   "Ala", "Arg", "Asn", "Asp", "Cys", "Gln", "Glu", "Gly", "His",
   "Ile", "Met", "Leu", "Lys", "Phe", "Pro", "Ser", "Thr", "Trp", "Tyr", "Val", "Stop")
 AA_order <- rev(AA_order)
 AA_color <- c('red', rep('black', times = 20))
 
-Fig1D <-
-  Fig1D_data %>%
+Base_editing_AA_combn <-
+  Base_editing_AA_combn_data %>%
   mutate(
     AA = ordered(AA, levels = AA_order),
     n_AA = ifelse(group == 'Mutated', n_AA * -1, n_AA)
@@ -51,5 +51,5 @@ Fig1D <-
     legend.background = element_rect(color = 'black')
   ) +
   coord_fixed(ylim = c(-7, 4))
-Fig1D
-ggsave('figures/Figure-1D.pdf', Fig1D, height = 3, width = 5)
+Base_editing_AA_combn
+ggsave('figures/Base-editing-AA-missense-combinations.pdf', Base_editing_AA_combn, height = 3, width = 5)

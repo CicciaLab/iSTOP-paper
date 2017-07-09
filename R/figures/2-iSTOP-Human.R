@@ -1,18 +1,15 @@
-# ---- Figure 3A: ----
-Fig3A <- ggplot() + theme_bw()
-
-# ---- Figure 3B: Number of targetable sites by codon/PAM ----
+# ---- Number of targetable sites by codon/PAM ----
 codons_tx <- read_csv('data/iSTOP-by-codon/Hsapiens-hg38.csv', col_types = cols(aa_coord = col_double()))
 
-# Targetable sites are defined by chromosome, genome coordinate, and codon
+# Targetable codons are defined by codon, chromosome, strand, and genome coordinate
 # Any given site may be present in multiple transcripts/genes
 codons <- codons_tx %>%
-  select(chr, strand, genome_coord, codon, starts_with('match')) %>%
+  select(codon, chr, strand, genome_coord, starts_with('match')) %>%
   distinct %>%
   filter(!is.na(match_any)) %>% # Not concerned about untargetable genes/transcripts
   rename(match_Targetable = match_any)
 
-codon_summary <- codons %>%
+codon_summary_data <- codons %>%
   bind_rows(codons %>% mutate(codon = 'CAG\nTGG\nCAA\nCGA')) %>%
   select(-chr, -genome_coord, -strand) %>%
   mutate('_Total' = TRUE) %>%
@@ -26,18 +23,15 @@ codon_summary <- codons %>%
     match_type = ordered(match_type, levels = c('NGCG', 'NNGRRT', 'NGAG', 'NNNRRT', 'NGNG', 'NGG', 'NGA', 'Targetable', 'Total'))
   )
 
-Fig3B <-
-  codon_summary %>%
+codon_summary_human <-
+  codon_summary_data %>%
   ggplot(aes(x = codon, y = count / 1000, color = match_type, fill = match_type)) +
   geom_col(aes(alpha = match_type), position = 'dodge') +
-  #geom_point(position = position_dodge(width = 1)) +
   scale_y_continuous(breaks = seq(0, 900, by = 100)) +
   scale_alpha_discrete(range = c(0.2, 0.8)) +
   coord_flip(ylim = c(0, 900), expand = F) +
-  #scale_y_log10() +
   guides(alpha = guide_legend(title = '', reverse = T), fill = guide_legend(title = '', reverse = T), color = guide_legend(title = '', reverse = T)) +
   theme_bw() +
-  #facet_grid(codon ~ .) +
   geom_vline(xintercept = seq(1.5, 4.5, by = 1), size = 0.5, color = 'grey') +
   labs(y = 'Count (x1000)') +
   theme(
@@ -46,12 +40,12 @@ Fig3B <-
     panel.grid.major.y = element_blank(),
     aspect.ratio = 1
   )
-Fig3B
+codon_summary_human
 
-ggsave('figures/Figure-3B.pdf', Fig3B, height = 5, width = 5)
+ggsave('figures/Codon-summary-human.pdf', codon_summary_human, height = 5, width = 5)
 
-# ---- Figure 3C: Protein length vs. Targetable codons ----
-match_counts_by_tx <- codons_tx %>%
+# ---- Protein length vs. Targetable codons ----
+match_counts_by_pep_length_data <- codons_tx %>%
   select(tx, pep_length, codon, starts_with('match_')) %>%
   group_by(tx, pep_length) %>%
   summarise(
@@ -65,14 +59,15 @@ match_counts_by_tx <- codons_tx %>%
     n_sgNNNRRT = length(which(match_sgNNNRRT))
   )
 
-Fig3C <- match_counts_by_tx %>%
+match_counts_by_pep_length <-
+  match_counts_by_pep_length_data %>%
   ggplot(aes(x = pep_length, y = n_match)) +
   geom_point(alpha = 0.2) +
-  geom_point(alpha = 0.5, color = 'red', data = filter(match_counts_by_tx, n_match == 0L)) +
+  geom_point(alpha = 0.5, color = 'red', data = filter(match_counts_by_pep_length_data, n_match == 0L)) +
   geom_density2d(color = '#ffe371') +
   scale_x_log10(breaks = c(10, 100, 1000, 10000, 100000), labels = c(10, 100, '1,000', '10,000', '100,000')) +
   scale_y_log10(breaks = c(0.5, 1, 10, 100, 1000, 2000), labels = c(0, 1, 10, 100, '1,000', '')) +
-  #annotation_logticks() +
+  annotation_logticks() +
   stat_smooth(method = 'lm', color = '#99b1df', se = F) +
   coord_cartesian(xlim = c(10, 100000), ylim = c(0.5, 2000), expand = F) +
   theme_bw() +
@@ -84,30 +79,29 @@ Fig3C <- match_counts_by_tx %>%
     x = 1050,
     y = 2,
     label = str_c(
-      nrow(filter(match_counts_by_tx, n_match == 0L)),
+      nrow(filter(match_counts_by_pep_length_data, n_match == 0L)),
       ' (',
-      round((nrow(filter(match_counts_by_tx, n_match == 0L)) / nrow(match_counts_by_tx)) * 100, digits = 2),
+      round((nrow(filter(match_counts_by_pep_length_data, n_match == 0L)) / nrow(match_counts_by_pep_length_data)) * 100, digits = 2),
       '%) untargetable')
   ) +
   annotate('segment', x = 1000, y = 1.6, xend = 150, yend = 0.6, size = 1, color = 'red', arrow = arrow(angle = 15, length = unit(0.15, "inches"), type = 'closed')) +
   labs(x = 'Protein length (AA)', y = 'Targetable codons')
-Fig3C
+match_counts_by_pep_length
 
-ggsave('figures/Figure-3C.pdf', Fig3C, height = 5, width = 5)
+ggsave('figures/Match-counts-by-pep-length.pdf', match_counts_by_pep_length, height = 5, width = 5)
 
-# ---- Figure 3D: ECDF earliest targetable codon ----
+# ---- ECDF earliest targetable codon ----
 
 # Currently only used for order (not color). Uncomment scale_color_manual
 colors <- c(
   Total  = 'red',
-  All    = '#242424', # Black
-  NGA    = '#faa11f', # Orange
-  NGG    = '#009f77', # Bluish Green
-  #NGNG   = '#00b8ea', # Sky Blue
-  NNNRRT = '#f4e449', # Yellow
-  NGAG   = '#0078b5', # Blue
-  NNGRRT = '#f16424', # Vermillion
-  NGCG   = '#e27fad' # Reddish Purple
+  All    = '#242424',
+  NGA    = '#faa11f',
+  NGG    = '#009f77',
+  NNNRRT = '#f4e449',
+  NGAG   = '#0078b5',
+  NNGRRT = '#f16424',
+  NGCG   = '#e27fad'
 )
 
 gene_tx_codon <-
@@ -137,13 +131,11 @@ earliest_by_tx_gathered <-
   earliest_by_tx %>%
   gather(PAM, earliest_relative_position, starts_with('earliest_relative_position')) %>%
   mutate(PAM = str_extract(PAM, '(?<=(position_)).*')) %>%
-#  bind_rows(data_frame(PAM = 'Total', earliest_relative_position = 2)) %>%  # add only to get matching color scale with Fig 3B
+#  bind_rows(data_frame(PAM = 'Total', earliest_relative_position = 2)) %>%  # used only to get matching color scale with codon_summary_human
   mutate(PAM = PAM %>% ordered(levels = rev(names(colors))))
 
-Fig3D <-
+ecdf_earliest_targetable_position <-
   ggplot(earliest_by_tx_gathered) +
-  #geom_hline(yintercept = c(0, 1)) +
-  #geom_hline(yintercept = frac_targetable, linetype = 'dotted') +
   stat_ecdf(
     aes(earliest_relative_position, color = PAM),
     size  = 1.75,
@@ -157,13 +149,13 @@ Fig3D <-
        y = 'Earliest targetable position < relative position \n(% of protein coding transcripts)') +
   theme_bw() +
   theme(aspect.ratio = 1, panel.grid.minor = element_blank())
-Fig3D
+ecdf_earliest_targetable_position
 
-ggsave('figures/Figure-3D.pdf', Fig3D, height = 5, width = 5)
+ggsave('figures/ECDF-earliest-targetable-position.pdf', ecdf_earliest_targetable_position, height = 5, width = 5)
 
-# ---- Figure 3E: Targetable homologs ----
-Fig3E_data <-
-  read_csv('data/Figure-data/Figure-3E.csv') %>%
+# ---- Targetable homologs ----
+targetable_homologs_data <-
+  read_csv('data/Figure-data/Targetable-Homologs.csv') %>%
   summarise(
     'Untargetable in Human' = n(),
     'Mouse homolog'     = length(which(!is.na(mouse_ucsc))),
@@ -185,8 +177,8 @@ Fig3E_data <-
   mutate(type = ordered(type, levels = type[order(count)])) %>%
   mutate(group = ifelse(type == 'Untargetable in Human', 'Untargetable', 'Targetable'))
 
-Fig3E <-
-  Fig3E_data %>%
+targetable_homologs <-
+  targetable_homologs_data %>%
   ggplot(aes(y = count, x = type, fill = group)) +
   geom_col(color = 'black', position = 'identity', width = 0.6) +
   geom_text(aes(label = count, color = group), fontface = 'bold', hjust = 1.2) +
@@ -207,12 +199,12 @@ Fig3E <-
     legend.direction = 'vertical',
     legend.background = element_rect(colour = 'black', fill = 'white')
   )
-Fig3E
+targetable_homologs
 
-ggsave('figures/Figure-3E.pdf', Fig3E, width = 5, height = 5)
+ggsave('figures/Targetable-homologs.pdf', targetable_homologs, width = 5, height = 5)
 
-# ---- Figure 3F: Restriction enzymes
-sites <- 'data/iSTOP-compact/Hsapiens-hg38.csv' %>%
+# ---- Restriction enzymes
+RFLP <- 'data/iSTOP-compact/Hsapiens-hg38.csv' %>%
   read_csv(col_types = cols_only(
     chr          = col_character(),
     strand       = col_character(),
@@ -223,8 +215,8 @@ sites <- 'data/iSTOP-compact/Hsapiens-hg38.csv' %>%
   ) %>%
   distinct
 
-sites_summary <-
-  sites %>%
+RFLP_summary_data <-
+  RFLP %>%
   summarise(
     total = n(),
     RFLP_150 = length(which(!is.na(RFLP_150))),
@@ -237,8 +229,8 @@ sites_summary <-
     percent = count / total
   )
 
-Fig3F <-
-  sites_summary %>%
+RFLP_summary <-
+  RFLP_summary_data %>%
   ggplot(aes(y = percent, x = distance)) +
   geom_col(aes(fill = 'orange', color = 'orange'), alpha = 0.5) +
   #geom_line(aes(color = 'orange'), size = 2) +
@@ -250,25 +242,26 @@ Fig3F <-
   coord_cartesian(ylim = c(0, 1)) +
   labs(y = 'iSTOP verifiable by RFLP\n(loss of cutting after edit)', x = 'Range of unique cutting\n(+/- bases from edited site)') +
   theme_bw() +
-  theme(panel.grid.major.y = element_line(color = 'black', linetype = 'dotted'))
-Fig3F
+  theme(panel.grid.major.y = element_line(color = 'black', linetype = 'dotted')) +
+  guides(color = 'none', fill = 'none')
+RFLP_summary
 
-ggsave('figures/Figure-3F.pdf', Fig3F, width = 5, height = 5)
+ggsave('figures/RFLP-summary.pdf', RFLP_summary, width = 5, height = 5)
 
-# ---- Figure 3: Bringing it all together! Hold on to your butts! ----
-gt_Fig3A <- Fig3A %>% ggplot_build %>% ggplot_gtable
-gt_Fig3B <- Fig3B %>% ggplot_build %>% ggplot_gtable
-gt_Fig3C <- Fig3C %>% ggplot_build %>% ggplot_gtable
-gt_Fig3D <- Fig3D %>% ggplot_build %>% ggplot_gtable
-gt_Fig3E <- Fig3E %>% ggplot_build %>% ggplot_gtable
-gt_Fig3F <- Fig3F %>% ggplot_build %>% ggplot_gtable
-
-gt_Fig3AB <- cbind(gt_Fig3A, gt_Fig3B)
-gt_Fig3CD <- cbind(gt_Fig3C, gt_Fig3D)
-gt_Fig3EF <- cbind(gt_Fig3E, gt_Fig3F)
-gt_Fig3   <- rbind(gt_Fig3AB, gt_Fig3CD, gt_Fig3EF)
-
-pdf('figures/Figure-3.pdf', width = 10, height = 12)
-plot(gt_Fig3) # Too big! Go home!
-dev.off()
+# ---- Combining into a single figure ----
+#gt_Fig3A <- Fig3A %>% ggplot_build %>% ggplot_gtable
+#gt_Fig3B <- Fig3B %>% ggplot_build %>% ggplot_gtable
+#gt_Fig3C <- Fig3C %>% ggplot_build %>% ggplot_gtable
+#gt_Fig3D <- Fig3D %>% ggplot_build %>% ggplot_gtable
+#gt_Fig3E <- Fig3E %>% ggplot_build %>% ggplot_gtable
+#gt_Fig3F <- Fig3F %>% ggplot_build %>% ggplot_gtable
+#
+#gt_Fig3AB <- cbind(gt_Fig3A, gt_Fig3B)
+#gt_Fig3CD <- cbind(gt_Fig3C, gt_Fig3D)
+#gt_Fig3EF <- cbind(gt_Fig3E, gt_Fig3F)
+#gt_Fig3   <- rbind(gt_Fig3AB, gt_Fig3CD, gt_Fig3EF)
+#
+#pdf('figures/Figure-3.pdf', width = 10, height = 12)
+#plot(gt_Fig3) # Too big! Go home!
+#dev.off()
 

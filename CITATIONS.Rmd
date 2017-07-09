@@ -11,15 +11,17 @@ knitr::opts_chunk$set(echo = FALSE, results = 'asis', warning = F)
 
 The authors of this project would like to thank the countless hours of work that have made our analysis possible. In addition to the curators of the [COSMIC and CGC](https://doi.org/10.1093/nar/gkw1121), and the [UCSC genome browser](https://genome.ucsc.edu), we thank the authors of the following free and open-source software pacakges.
 
-The R project
+
+## The R project
 
 ```{r}
 print(citation(), style = 'html')
 ```
 
-[The RStudio IDE](https://www.rstudio.com)
+The [RStudio](https://www.rstudio.com) IDE.  
 
-R packages to streamline data analysis
+
+## R packages to streamline data analysis
 
 ```{r}
 print(citation('tidyverse'), style = 'html')
@@ -32,21 +34,19 @@ print(citation('tibble'), style = 'html')
 print(citation('fuzzyjoin'), style = 'html')
 ```
 
-R packages for genomic sequence analysis
+
+## R packages for genomic sequence analysis
 
 ```{r}
 print(citation('BSgenome'), style = 'html')
 print(citation('Biostrings'), style = 'html')
 print(citation('IRanges'), style = 'html')
-print(citation('GenomicRanges'), style = 'html')
 print(citation('biomaRt'), style = 'html')
 ```
 
-R packages for figure generation
+
+## R packages for figure generation
 
 ```{r}
 print(citation('ggplot2'), style = 'html')
-print(citation('gridExtra'), style = 'html')
-print(citation('gtable'), style = 'html')
-print(citation('cowplot'), style = 'html')
 ```

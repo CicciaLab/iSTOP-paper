@@ -155,7 +155,7 @@ n_sites <-
 
 by_gene <-
   COSMIC_nonsense %>%
-  select(gene, cancer_type, chr, strand, coord, PAM, iSTOP) %>%
+  select(gene, cancer_type, chr, strand, genome_coord, PAM, iSTOP) %>%
   bind_rows(mutate(., cancer_type = 'All cancers')) %>%
   distinct %>%
   group_by(gene, cancer_type) %>%

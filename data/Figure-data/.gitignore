@@ -1,0 +1,8 @@
+# Ignore everything in this directory
+*
+# Except these files
+!.gitignore
+!README.md
+!Base-editing-AA-missense-combinations.csv
+!Base-editing-summary.csv
+!Targetable-Homologs.csv

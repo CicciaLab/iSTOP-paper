@@ -1,8 +1,3 @@
-library(tidyverse)
-library(grid)
-library(gridExtra)
-library(gtable)
-
 cancer_types <- read_csv('data/COSMIC/COSMIC-summary-by-cancer.csv') %>% filter(mutation_class == 'Nonsense') %>% mutate(frac_nonsense_cancer = n_iSTOP_sites_in_cancer / n_nonsense_in_cancer)
 plot_data <-
   read_csv('data/COSMIC/COSMIC-summary-by-gene.csv') %>%
@@ -21,7 +16,7 @@ plot_data <-
 plot_data %>%
   filter(q < 0.001) %>%
   arrange(q) %>%
-  write_csv('data/Figure-data/frequent-iSTOPers.csv')
+  write_csv('data/Figure-data/Frequent-iSTOPers.csv')
 
 keep <-
   plot_data %>%
@@ -44,7 +39,7 @@ gg1_data <-
     frac_sites  = ifelse(frac_sites < 0.05, 0, frac_sites)
   )
 
-Fig5C <-
+prevalence_gene_cancer <-
   gg1_data %>%
   ggplot(aes(y = cancer_type, x = gene, color = cancer_type)) +
   geom_point(aes(size = frac_sites, alpha = frac_sites)) +
@@ -71,8 +66,8 @@ Fig5C <-
     panel.grid.minor = element_blank(),
     plot.margin = unit(c(0,0,0.25,0.25),"cm")
   )
-Fig5C
-ggsave('figures/Figure-5C.pdf', Fig5C, width = 10, height = 5)
+prevalence_gene_cancer
+ggsave('figures/Prevalence-gene-cancer.pdf', prevalence_gene_cancer, width = 10, height = 5)
 
 
 gg2_data <-
@@ -96,7 +91,7 @@ gg2_data_2 <-
   gg2_data %>%
   select(cancer_type, count = n_iSTOP_sites_in_cancer_with_PAM, frac = iSTOP_PAM)
 
-Fig5D <-
+prevalence_cancer <-
   gg2_data_1 %>%
   ggplot(aes(x = cancer_type, color = cancer_type, fill = cancer_type)) +
   geom_col(aes(alpha = group, y = frac), position = 'identity') +
@@ -117,9 +112,9 @@ Fig5D <-
     legend.justification = 'left',
     legend.background = element_blank()
   )
-Fig5D
+prevalence_cancer
 
-ggsave('figures/Figure-5D.pdf', Fig5D, width = 10, height = 5)
+ggsave('figures/Prevalence-cancer.pdf', prevalence_cancer, width = 5, height = 5)
 
 gg3_data <-
   gg1_data %>%
@@ -150,7 +145,7 @@ gg3_data_text <-
     frac
   )
 
-Fig5A <-
+prevalence_gene <-
   gg3_data %>%
   ggplot(aes(x = gene, y = frac, color = 'All cancers', fill = 'All cancers', alpha = group)) +
   geom_col(position = 'identity') +
@@ -179,8 +174,8 @@ Fig5A <-
     legend.key.height = unit(0.09, 'npc')
   )
 
-Fig5A
-ggsave('figures/Figure-5A.pdf', Fig5A, width = 10, height = 5)
+prevalence_gene
+ggsave('figures/Prevalence-gene.pdf', prevalence_gene, width = 10, height = 5)
 
 # ---- Upper right panel: Frequent stoppers ----
 
@@ -189,7 +184,7 @@ plot_data_limit <-
   plot_data %>%
   mutate(`-log10(q)` = ifelse(`-log10(q)` > 35, 35, `-log10(q)`))
 
-Fig5B <-
+frequent_stoppers <-
   plot_data_limit %>%
   ggplot(aes(x = cancer_type, y = `-log10(q)`, color = cancer_type)) +
   geom_point(color = 'grey', position = position_jitter(),   data = filter(plot_data_limit, `-log10(q)` <= 3)) +
@@ -209,18 +204,19 @@ Fig5B <-
     #panel.grid.major.x = element_blank(),
     axis.title.x = element_blank()
     #axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-Fig5B
-ggsave('figures/Figure-5B.pdf', Fig5B + theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.grid.minor = element_blank(), panel.grid.major.x = element_blank()), width = 7.5, height = 5)
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.grid.minor = element_blank(), panel.grid.major.x = element_blank())
+frequent_stoppers
+ggsave('figures/Frequent-stoppers.pdf', frequent_stoppers, width = 7.5, height = 5)
 #ggsave('figures/Figure-5B.pdf', Fig5B, width = 5, height = 5)
 
-g5A  <- ggplotGrob(Fig5A + guides(alpha = 'none'))
-g5B  <- ggplotGrob(Fig5B)
-g5AB <- cbind(g5A, g5B)
-g5C  <- ggplotGrob(Fig5C)
-g5D  <- ggplotGrob(Fig5D)
-g5CD <- cbind(g5C, g5D)
-g5   <- rbind(g5AB, g5CD)
-plot(g5)
-ggsave('figures/Figure-5.pdf', g5, width = 15, height = 10)
-ggsave('figures/Figure-5-narrow.pdf', g5, width = 7.5, height = 10)
+#g5A  <- ggplotGrob(Fig5A + guides(alpha = 'none'))
+#g5B  <- ggplotGrob(Fig5B)
+#g5AB <- cbind(g5A, g5B)
+#g5C  <- ggplotGrob(Fig5C)
+#g5D  <- ggplotGrob(Fig5D)
+#g5CD <- cbind(g5C, g5D)
+#g5   <- rbind(g5AB, g5CD)
+#plot(g5)
+#ggsave('figures/Figure-5.pdf', g5, width = 15, height = 10)
+#ggsave('figures/Figure-5-narrow.pdf', g5, width = 7.5, height = 10)
