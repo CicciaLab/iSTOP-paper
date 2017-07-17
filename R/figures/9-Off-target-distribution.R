@@ -24,7 +24,7 @@ NGG %>%
   theme_bw() +
   theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
   labs(
-    x = 'Number of mapped sites in genome\n(Allowing 2 ambiguities outside of guides seed sequence)',
+    x = "Number of mapped sites in genome\n(Allowing 2 ambiguities oustide of guide's seed sequence)",
     y = 'Cumulative % of human NGG sgSTOPs'
   ) +
   ggsave(figure, width = 5, height = 5)
