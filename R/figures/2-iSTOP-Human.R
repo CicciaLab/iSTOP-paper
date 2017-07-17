@@ -252,9 +252,28 @@ RFLP_summary_data <-
     percent  = count / total
   )
 
+# RFLP_summary <-
+#   RFLP_summary_data %>%
+#   ggplot(aes(y = percent, x = distance, fill = type, color = type, alpha = type)) +
+#   geom_col(position = position_dodge()) +
+#   #geom_line(aes(color = 'orange'), size = 2) +
+#   #geom_point(aes(color = 'orange'), size = 5) +
+#   #geom_point(aes(color = 'white'), size = 2) +
+#   #scale_color_manual(breaks = c('orange', 'white'), values = c('#f2a880', 'white')) +
+#   scale_alpha_manual(values = seq(from = 0.8, to = 0.3, length.out = 4)) +
+#   scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
+#   scale_x_continuous(breaks = c(50, 100, 150)) +
+#   coord_cartesian(ylim = c(0, 1)) +
+#   labs(y = 'iSTOP verifiable by RFLP', x = 'Range of unique cutting\n(+/- bases from edited site)') +
+#   theme_bw() +
+#   theme(panel.grid.major.y = element_line(color = 'black', linetype = 'dotted')) +
+#   labs(alpha = 'Cut after edit', fill = 'Cut after edit', color = 'Cut after edit')
+# RFLP_summary
+
 RFLP_summary <-
   RFLP_summary_data %>%
-  ggplot(aes(y = percent, x = distance, fill = type, color = type, alpha = type)) +
+  filter(distance == 50) %>%
+  ggplot(aes(y = percent, x = type, fill = type, color = type, alpha = type)) +
   geom_col(position = position_dodge()) +
   #geom_line(aes(color = 'orange'), size = 2) +
   #geom_point(aes(color = 'orange'), size = 5) +
@@ -262,12 +281,13 @@ RFLP_summary <-
   #scale_color_manual(breaks = c('orange', 'white'), values = c('#f2a880', 'white')) +
   scale_alpha_manual(values = seq(from = 0.8, to = 0.3, length.out = 4)) +
   scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
-  scale_x_continuous(breaks = c(50, 100, 150)) +
+  #scale_x_continuous(breaks = c(50, 100, 150)) +
   coord_cartesian(ylim = c(0, 1)) +
-  labs(y = 'iSTOP verifiable by RFLP', x = 'Range of unique cutting\n(+/- bases from edited site)') +
+  labs(y = 'iSTOP verifiable by RFLP', x = 'Cutting after edit') +
   theme_bw() +
   theme(panel.grid.major.y = element_line(color = 'black', linetype = 'dotted')) +
-  labs(alpha = 'Cut after edit', fill = 'Cut after edit', color = 'Cut after edit')
+  #labs(alpha = 'Cut after edit', fill = 'Cut after edit', color = 'Cut after edit') +
+  guides(fill = 'none', color = 'none', alpha = 'none')
 RFLP_summary
 
 ggsave('figures/RFLP-summary.pdf', RFLP_summary, width = 5, height = 5)

@@ -21,27 +21,46 @@ enzyme_performance <-
     n_sites = nrow(RFLP),
     percent_loss_cut = (n_loss_cut / n_sites) * 100,
     percent_gain_cut = (n_gain_cut / n_sites) * 100
-  )
+  ) %>%
+  arrange(-n_loss_cut)
 
-write_csv(select(enzyme_performance, enzyme, n_loss_cut, percent_loss_cut) %>% arrange(-n_loss_cut), 'data/Figure-data/RFLP-enzyme-performance.csv')
+write_csv(select(enzyme_performance, enzyme, n_loss_cut, percent_loss_cut, n_gain_cut, percent_gain_cut), 'data/Figure-data/RFLP-enzyme-performance.csv')
 
-RFLP_enzyme_performance_top10 <- enzyme_performance %>%
+RFLP_loss_enzyme_performance_top10 <- enzyme_performance %>%
   #top_n(50, percent_loss_cut) %>%
   top_n(10, percent_loss_cut) %>%
   mutate(enzyme = ordered(enzyme, levels = enzyme[order(percent_loss_cut)])) %>%
   ggplot(aes(x = enzyme, y = percent_loss_cut)) +
   geom_col(color = 'black', fill = 'orange', alpha = 0.5) +
   scale_y_continuous(expand = c(0, 0)) +
-  coord_flip(ylim = c(0, 5)) +
+  coord_flip(ylim = c(0, 3)) +
   labs(y = "% of iSTOP sites with unique cutting +/- 150 bp") +
   theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_line(color = 'black', linetype = 'dotted'), panel.grid.major.y = element_blank()) +
   theme(axis.title.y = element_blank())
 
-RFLP_enzyme_performance_top10
+RFLP_loss_enzyme_performance_top10
 
-ggsave('figures/RFLP-enzyme-performance-top10.png', RFLP_enzyme_performance_top10, width = 5, height = 7)
-#ggsave('figures/RFLP-enzyme-performance-top10.pdf', RFLP_enzyme_performance_top10, width = 5, height = 7)
+ggsave('figures/RFLP-loss-enzyme-performance-top10.png', RFLP_loss_enzyme_performance_top10, width = 5, height = 7)
+#ggsave('figures/RFLP-loss-enzyme-performance-top10.pdf', RFLP_loss_enzyme_performance_top10, width = 5, height = 7)
 
+RFLP_gain_enzyme_performance_top10 <- enzyme_performance %>%
+  #top_n(50, percent_loss_cut) %>%
+  top_n(10, percent_gain_cut) %>%
+  mutate(enzyme = ordered(enzyme, levels = enzyme[order(percent_gain_cut)])) %>%
+  ggplot(aes(x = enzyme, y = percent_gain_cut)) +
+  geom_col(color = 'black', fill = 'orange', alpha = 0.5) +
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_flip(ylim = c(0, 3)) +
+  labs(y = "% of iSTOP sites with unique cutting +/- 150 bp") +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_line(color = 'black', linetype = 'dotted'), panel.grid.major.y = element_blank()) +
+  theme(axis.title.y = element_blank())
+
+RFLP_gain_enzyme_performance_top10
+
+ggsave('figures/RFLP-gain-enzyme-performance-top10.png', RFLP_gain_enzyme_performance_top10, width = 5, height = 7)
+#ggsave('figures/RFLP-gain-enzyme-performance-top10.pdf', RFLP_gain_enzyme_performance_top10, width = 5, height = 7)
 
 RFLP_enzyme_performance_top50 <- enzyme_performance %>%
   top_n(50, percent_loss_cut) %>%
