@@ -223,7 +223,7 @@ This analysis was successfully performed with the following system, and package 
     ##  language (EN)                        
     ##  collate  en_US.UTF-8                 
     ##  tz       America/New_York            
-    ##  date     2017-07-07                  
+    ##  date     2017-07-17                  
     ## 
     ##  package              * version  date       source                          
     ##  assertthat             0.2.0    2017-04-11 CRAN (R 3.4.0)                  
