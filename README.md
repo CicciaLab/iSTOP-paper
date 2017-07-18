@@ -132,7 +132,7 @@ library(iSTOP)
 list.files('R/functions', '[.]R$', full.names = T) %>% walk(source)
 ```
 
-Given CDS coordinates and genomes, search for all iSTOP sites with the following commands. Raw results will be saved to the `data/iSTOP` directory, and a compacted version with RFLP annotations will be saved to the `data/iSTOP-compact` directory. To dramatically reduce computation time, comment out the `add_RFLP` lines.
+Given CDS coordinates and genomes, search for all iSTOP sites with the following commands. Raw results will be saved to the `data/iSTOP` directory, and a compacted version with RFLP annotations will be saved to the `data/iSTOP-compact` directory. To dramatically reduce computation time, comment out the `add_RFLP` lines. Documentation for each function can be accessed using `?`. For example, to read detailed documentation for the `locate_codons` function, enter `?locate_codons` in the R console. In brief, previously downloaded CDS coordinates are passed to `locate_codons` which validates each transcript and determines genomic coordinates of user specified codons (CAA, CAG, CGA and TGG by default). These results are then passed to `locate_PAM`, which extracts genomic sequence context and searches for an appropriately spaced PAM (NGG, NGA, NGAG, NGCG, NNGRRT and NNNRRT by default). This dataset is saved, and then a compact version is constructed such that each targetable coordinate within a gene is represented by a single row. Finally, RFLP annotations are added with varying widths of unique cutting.
 
 ``` r
 # Adjust the number of cores for parallel computation to suit your computer
@@ -178,7 +178,7 @@ Off-target estimates
 
 **Warning:** No memory optimization has been done for off-target searching, so this analysis requires &gt;6 GB of RAM and several hours of processing time. This section can be skipped if desired.
 
-The following script will populate the `data/Off-target-counts` directory with estimates of the number of targets in the genome for each guide. The current settings restrict the search space by fixing positions 9 through 12 in the guide (i.e. no ambiguities are allowed in the guides "seed" sequence). The PAM is also fixed allowing for ambiguity where specified (e.g. "NGG" allows ambiguity in the first position of the PAM). Up to two mismatches are tolerated in the positions 1 through 8 of the guide. The resulting tables include two columns:
+The following script will populate the `data/Off-target-counts` directory with estimates of the number of targets in the genome for each guide. The current settings restrict the search space by fixing positions 9 through 12 in the guide (i.e. no ambiguities are allowed in the guide's "seed" sequence). The PAM is also fixed allowing for ambiguity where specified (e.g. "NGG" allows ambiguity in the first position of the PAM). Up to two mismatches are tolerated in positions 1 through 8 of the guide. The resulting tables include two columns:
 
 1.  **guide** - The guide sequence
 2.  **n\_fuzzy\_matches** - The number of fuzzy matches in the genome. Each guide is expected to have 1 match in the genome. More than 1 match indicates there might be other target sites in the genome (when allowing two mismatches in the leading 8 bases of the guide)
@@ -202,6 +202,52 @@ The raw COSMIC dataset can be cleaned and summarized by sourcing the `R/Clean-CO
 source('R/scripts/Clean-COSMIC.R')
 ```
 
+Cancer subtypes are defined by the following:
+
+``` r
+# Note: this is computed during source('R/scripts/Clean-COSMIC.R')
+case_when(
+  # Case definition                                              ~ Case name
+  str_detect(primary_histology, 'melanoma')                      ~ 'Malignant melanoma',
+  primary_site == 'large_intestine'                              ~ 'Colorectal',
+  primary_site == 'endometrium'                                  ~ 'Endometrial',
+  primary_site == 'lung'                                         ~ 'Lung',
+  primary_site == 'liver'                                        ~ 'Liver',
+  primary_site == 'skin'                                         ~ 'Non-melanoma skin',
+  primary_site == 'breast'                                       ~ 'Breast',
+  primary_site == 'stomach'                                      ~ 'Stomach',
+  primary_site %in% c('upper_aerodigestive_tract', 'oesophagus') ~ 'Upper aerodigestive',
+  primary_site == 'haematopoietic_and_lymphoid_tissue'           ~ 'Blood',
+  primary_site == 'prostate'                                     ~ 'Prostate',
+  primary_site == 'pancreas'                                     ~ 'Pancreatic',
+  primary_site == 'urinary_tract'                                ~ 'Bladder',
+  primary_site == 'kidney'                                       ~ 'Kidney',
+  primary_histology == 'glioma'                                  ~ 'Glioma',
+  primary_site == 'ovary'                                        ~ 'Ovarian',
+  primary_site == 'cervix'                                       ~ 'Cervical',
+  primary_site == 'thyroid'                                      ~ 'Thyroid',
+  primary_site == 'bone'                                         ~ 'Bone',
+  TRUE ~ 'Other'
+)
+```
+
+Binomial p-values and multiple test corrected q-values for the frequent iSTOPer analysis were computed with the following:
+
+``` r
+p = binom.test(
+  n_iSTOP_sites_in_gene_in_cancer, # Successes in gene in cancer type
+  n_iSTOP_sites_in_gene,           # Trials in gene
+  P_event[cancer_type],            # Probability of success in cancer type
+  alternative = 'greater'          # One-sided test
+)$p.value
+
+q = p.adjust(p, method = 'fdr')
+
+# To read the documentation on these functions
+help(binom.test)
+help(p.adjust)
+```
+
 Reproducing Figures
 ===================
 
@@ -223,7 +269,7 @@ This analysis was successfully performed with the following system, and package 
     ##  language (EN)                        
     ##  collate  en_US.UTF-8                 
     ##  tz       America/New_York            
-    ##  date     2017-07-17                  
+    ##  date     2017-07-18                  
     ## 
     ##  package              * version  date       source                          
     ##  assertthat             0.2.0    2017-04-11 CRAN (R 3.4.0)                  
