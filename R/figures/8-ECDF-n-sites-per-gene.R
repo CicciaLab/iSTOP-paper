@@ -1,23 +1,25 @@
 library(tidyverse)
 figure = 'figures/ECDF-n-sites-per-gene.pdf'
 
-data <- read_csv('data/iSTOP-website-version/Hsapiens-hg38.csv.gz')
+data <- read_csv('data/iSTOP/Hsapiens-hg38.csv', col_types = cols(aa_coord = col_double()))
 
 summary <- data %>%
-  select(gene, chr, strand, genome_coord, sgNGG, sgNGA, sgNGAG, sgNGCG, sgNNGRRT, sgNNNRRT) %>%
-  mutate(sgAll = T) %>%
-  gather(PAM, guide, sgNGG:sgAll, na.rm = T) %>%
-  mutate(PAM = gsub('sg', '', PAM)) %>%
+  select(gene, chr, strand, genome_coord, match_any, starts_with('sgN'), -ends_with('_spacing')) %>%
+  rename_at(vars(starts_with('sgN')), funs(gsub('sg', '', .))) %>%
+  distinct() %>%
+  mutate_at(vars(NGG:NNNRRT), funs(!is.na(.))) %>%
+  mutate(All = ifelse(is.na(match_any), FALSE, match_any)) %>%
+  gather(PAM, guide, NGG:All) %>%
   group_by(gene, PAM) %>%
-  summarise(n = n())
+  summarise(n = sum(guide))
 
-
-frac3 <- with(filter(summary, PAM == 'All'), sum(n <= 3) / length(n))
-median <- median(filter(summary, PAM == 'All')$n)
+frac3  <- 0.0349
+median <- 23
 
 summary %>%
   mutate(
-    PAM = ordered(PAM, levels = c('All', 'NGA', 'NGG', 'NNNRRT', 'NGAG', 'NNGRRT', 'NGCG'))
+    PAM = ordered(PAM, levels = c('All', 'NGA', 'NGG', 'NNNRRT', 'NGAG', 'NNGRRT', 'NGCG')),
+    n = ifelse(n == 0, 0.1, n) # for compatibility with log scale
   ) %>%
   ggplot(aes(x = n)) +
   stat_ecdf(aes(color = PAM)) +
@@ -29,6 +31,7 @@ summary %>%
   geom_segment(aes(x = 3, xend = 3, y = -1, yend = frac3), linetype = 'dotted', data = data_frame()) +
   geom_segment(aes(x = 1, xend = 3, y = frac3, yend = frac3), linetype = 'dotted', data = data_frame()) +
   geom_hline(yintercept = c(0, 1), linetype = 'dotted') +
+  scale_color_manual(values = c('#cc9ff9', '#49a7f8', '#67c8cd', '#55b96f', '#91b43e', '#c49532', '#e87c70')) +
   coord_cartesian(xlim = c(1, 1000), ylim = c(0, 1)) +
   theme_bw() +
   theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
