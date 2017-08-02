@@ -18,7 +18,7 @@ This project accompanies the [iSTOP](github.com/CicciaLab/iSTOP) R package, and 
 
 # Installation
 
-To reproduce the analysis in [TBD](link/to/publication), begin by installing [R](https://cran.r-project.org) (~100 MB) and [RStudio](https://www.rstudio.com/products/rstudio/download/) (~500 MB). 
+To reproduce the analysis in Billon, Bryant *et al.* 2017 *Molecular Cell*, begin by installing [R](https://cran.r-project.org) (~100 MB) and [RStudio](https://www.rstudio.com/products/rstudio/download/) (~500 MB). 
 
 Then, go to [github.com/CicciaLab/iSTOP-paper](github.com/CicciaLab/iSTOP-paper) and clone the project to your computer using the green `Clone or download>Download ZIP` button near the top of the page. Then unzip and open the project by clicking on the `iSTOP-paper.Rproj` file. This will open RStudio with the working directory set to the project's folder.
 

@@ -17,7 +17,7 @@ This project accompanies the [iSTOP](github.com/CicciaLab/iSTOP) R package, and 
 Installation
 ============
 
-To reproduce the analysis in [TBD](link/to/publication), begin by installing [R](https://cran.r-project.org) (~100 MB) and [RStudio](https://www.rstudio.com/products/rstudio/download/) (~500 MB).
+To reproduce the analysis in Billon, Bryant *et al.* 2017 *Molecular Cell*, begin by installing [R](https://cran.r-project.org) (~100 MB) and [RStudio](https://www.rstudio.com/products/rstudio/download/) (~500 MB).
 
 Then, go to [github.com/CicciaLab/iSTOP-paper](github.com/CicciaLab/iSTOP-paper) and clone the project to your computer using the green `Clone or download>Download ZIP` button near the top of the page. Then unzip and open the project by clicking on the `iSTOP-paper.Rproj` file. This will open RStudio with the working directory set to the project's folder.
 
@@ -269,7 +269,7 @@ This analysis was successfully performed with the following system, and package 
     ##  language (EN)                        
     ##  collate  en_US.UTF-8                 
     ##  tz       America/New_York            
-    ##  date     2017-07-18                  
+    ##  date     2017-08-02                  
     ## 
     ##  package              * version  date       source                          
     ##  assertthat             0.2.0    2017-04-11 CRAN (R 3.4.0)                  
@@ -291,7 +291,7 @@ This analysis was successfully performed with the following system, and package 
     ##  DelayedArray           0.2.7    2017-06-03 Bioconductor                    
     ##  devtools               1.13.2   2017-06-02 CRAN (R 3.4.0)                  
     ##  digest                 0.6.12   2017-01-27 CRAN (R 3.4.0)                  
-    ##  dplyr                * 0.7.1    2017-06-22 CRAN (R 3.4.0)                  
+    ##  dplyr                * 0.7.2    2017-07-20 cran (@0.7.2)                   
     ##  evaluate               0.10.1   2017-06-24 CRAN (R 3.4.0)                  
     ##  forcats                0.2.0    2017-01-23 CRAN (R 3.4.0)                  
     ##  foreign                0.8-69   2017-06-21 CRAN (R 3.4.0)                  
@@ -333,7 +333,7 @@ This analysis was successfully performed with the following system, and package 
     ##  psych                  1.7.5    2017-05-03 CRAN (R 3.4.0)                  
     ##  purrr                * 0.2.2.2  2017-05-11 cran (@0.2.2.2)                 
     ##  R6                     2.2.2    2017-06-17 CRAN (R 3.4.0)                  
-    ##  Rcpp                   0.12.11  2017-05-22 cran (@0.12.11)                 
+    ##  Rcpp                   0.12.12  2017-07-15 cran (@0.12.12)                 
     ##  RCurl                  1.95-4.8 2016-03-01 CRAN (R 3.4.0)                  
     ##  readr                * 1.1.1    2017-05-16 cran (@1.1.1)                   
     ##  readxl                 1.0.0    2017-04-18 CRAN (R 3.4.0)                  
