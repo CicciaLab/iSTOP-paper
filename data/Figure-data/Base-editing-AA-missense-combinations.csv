@@ -1,5 +1,5 @@
 AA,n_AA,group
-Ala,2,Mutated
+Ala,3,Mutated
 Ala,0,Generated
 Arg,6,Mutated
 Arg,1,Generated
@@ -18,7 +18,7 @@ Gly,0,Generated
 His,1,Mutated
 His,1,Generated
 Ile,0,Mutated
-Ile,3,Generated
+Ile,4,Generated
 Met,1,Mutated
 Met,2,Generated
 Leu,1,Mutated
@@ -31,13 +31,13 @@ Pro,3,Mutated
 Pro,0,Generated
 Ser,3,Mutated
 Ser,2,Generated
-Thr,3,Mutated
+Thr,2,Mutated
 Thr,1,Generated
 Trp,1,Mutated
 Trp,1,Generated
 Tyr,0,Mutated
 Tyr,2,Generated
 Val,2,Mutated
-Val,2,Generated
+Val,1,Generated
 Stop,0,Mutated
 Stop,3,Generated
