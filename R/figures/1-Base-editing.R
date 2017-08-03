@@ -37,7 +37,7 @@ Base_editing_AA_combn <-
   ggplot(aes(x = AA, y = n_AA, fill = group)) +
   geom_col(position = 'identity', color = 'black', width = 0.6) +
   geom_hline(yintercept = 0) +
-  scale_y_continuous(breaks = -6:4, expand = c(0, 0), labels = c(6:0, 1:4)) +
+  scale_y_continuous(breaks = -6:3, expand = c(0, 0), labels = c(6:0, 1:3)) +
   labs(y = 'Number of amino acids') +
   scale_fill_manual(values = c('#d02c1e', '#77cd99'), labels = c('To', 'From')) +
   guides(fill = guide_legend(title = 'Base edit', label.position = 'right', direction = 'vertical')) +
@@ -50,6 +50,6 @@ Base_editing_AA_combn <-
     legend.justification = c(0, 0),
     legend.background = element_rect(color = 'black')
   ) +
-  coord_fixed(ylim = c(-7, 5))
+  coord_fixed(ylim = c(-7, 4))
 Base_editing_AA_combn
 ggsave('figures/Base-editing-AA-missense-combinations.pdf', Base_editing_AA_combn, height = 3, width = 5)

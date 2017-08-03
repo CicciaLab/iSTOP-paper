@@ -1,5 +1,5 @@
 AA,n_AA,group
-Ala,3,Mutated
+Ala,2,Mutated
 Ala,0,Generated
 Arg,6,Mutated
 Arg,1,Generated
@@ -18,7 +18,7 @@ Gly,0,Generated
 His,1,Mutated
 His,1,Generated
 Ile,0,Mutated
-Ile,4,Generated
+Ile,3,Generated
 Met,1,Mutated
 Met,2,Generated
 Leu,1,Mutated
